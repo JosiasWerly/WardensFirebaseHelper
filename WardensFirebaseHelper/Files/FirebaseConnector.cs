@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -76,5 +77,38 @@ namespace WardensFirebaseHelper.Files {
             client.Dispose();
         }
 
+    }
+    public class FirebaseInterface {
+        string dbLocalPath = "";
+        FirebaseConnector fb = new FirebaseConnector("https://bigmoxiwardens.firebaseio.com/", "AIzaSyDDiV0BvrE0TUA3t7BzwVkz2pH5Ybs8Fgs");
+        public JObject dbData;
+
+        public FirebaseInterface(string filePath){
+            if(filePath == "")
+                throw new System.InvalidOperationException("db local instance needs a path");
+            dbLocalPath = filePath;            
+            try {
+                loadFromLocal();
+            }
+            catch (Exception) {
+                downloadDB();
+            }
+        }
+        public void downloadDB() {
+            dbData = fb.downloadJson("");
+            saveToLocal();
+        }
+        public void uploadDB() {
+            throw new System.InvalidOperationException("not done yet");
+        }
+        public void loadFromLocal() {
+            if (File.Exists(dbLocalPath))
+                dbData = JObject.Parse(File.ReadAllText(dbLocalPath));
+            else
+                throw new System.InvalidOperationException("dbLocalNotFound");
+        }
+        public void saveToLocal() {
+            File.WriteAllText(dbLocalPath, JsonConvert.SerializeObject(dbData));
+        }
     }
 }
