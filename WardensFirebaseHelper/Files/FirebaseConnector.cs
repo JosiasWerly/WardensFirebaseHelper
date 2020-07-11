@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -49,31 +50,31 @@ namespace WardensFirebaseHelper.Files {
         }
 
 
-        public Type downloadJson(string key) {
+        public JObject downloadJson(string key) {
             string URL = dbURL + key + "/.json";
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(URL);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             HttpResponseMessage response = client.GetAsync(dbPassword).Result;
-            Type outData = default(Type);
+            JObject outData = null;
             if (response.IsSuccessStatusCode) {
-                outData = response.Content.ReadAsAsync<Type>().Result;
+                outData = JObject.Parse(response.Content.ReadAsStringAsync().Result);
             }
             client.Dispose();
             return outData;
         }
-        public void uploadJson(string key, Type type) {
-            string outJson = JsonConvert.SerializeObject(type);
+        public void uploadJson(string key, JObject data) {
             string URL = dbURL + key + "/.json";
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(URL);
             client.DefaultRequestHeaders.Authorization = null;
             HttpRequestMessage request = new HttpRequestMessage {
                 Method = HttpMethod.Put,
-                Content = new StringContent(outJson, UnicodeEncoding.UTF8, "application/json")
+                Content = new StringContent(JsonConvert.SerializeObject(data), UnicodeEncoding.UTF8, "application/json")
             };
             HttpResponseMessage response = client.SendAsync(request).Result;
             client.Dispose();
         }
+
     }
 }
