@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace WardensFirebaseHelper.Files {
     namespace LevelData {
+        //https://json2csharp.com/
         public class InfoData {
             public string DisplayName { get; set; }
             public string LargeDescription { get; set; }
