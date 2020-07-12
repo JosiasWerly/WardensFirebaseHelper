@@ -54,7 +54,9 @@
   <ItemGroup>
     <Compile Include="Files\Disposer.cs" />
     <Compile Include="Files\FirebaseConnector.cs" />
-    <Compile Include="Files\WaveStructures.cs" />
+    <Compile Include="Files\WardenStructures\Enemies.cs" />
+    <Compile Include="Files\WardenStructures\Levels.cs" />
+    <Compile Include="Files\Worker.cs" />
     <Compile Include="Forms\Editor.cs">
       <SubType>Form</SubType>
     </Compile>
