@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,6 +18,9 @@ namespace WardensFirebaseHelper.Forms {
         
         public Editor() {            
             InitializeComponent();
+            FakeLevel f = new FakeLevel();
+            var d = dataBaseInterface.dbData;
+            
         }
     }
 }

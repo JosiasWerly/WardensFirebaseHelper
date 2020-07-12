@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,46 +30,67 @@ namespace WardensFirebaseHelper.Files {
             public string spawn_location;
             public Dictionary<string, int> enemies;
         }
-
-
+        
         public class FakeLevel : Level {
+            Random rnd = new Random();
+            string getRndList(ref List<string> ls) {
+                return ls[rnd.Next(0, ls.Count)];
+            }
             public Dictionary<string, int> generateEnemies() {
                 List<string> EnemiesNames = new List<string>{
                     "goblin_bomber",
                     "goblin_crossbow",
                     "goblin_gunner"
                 };
-                Random rnd = new Random();
                 Dictionary<string, int> outData = new Dictionary<string, int>();
                 for (int i = 0; i < 10; i++) {
-                    //rnd enemyname, rnd enemyQuantity
-                    outData[EnemiesNames[rnd.Next(0, EnemiesNames.Count)]] = rnd.Next(2, 10);
+                    outData[getRndList(ref EnemiesNames)] = rnd.Next(2, 10);
                 }
                 return outData;
             }
-            public Group generateGroup() {
-                Group g = new Group();
-                g.enemies = generateEnemies();
-                for (int i = 0; i < 10; i++) {
-                    //g.
+            public List<Group> generateGroups() {
+                List<string> portalNames = new List<string>{
+                    "portal0",
+                    "portal1",
+                    "portal2"
+                };
+                List<Group> outData = new List<Group>();
+                for (int i = 0; i < rnd.Next(5); i++) {
+                    Group g = new Group();
+                    g.spawn_location = getRndList(ref portalNames);
+                    g.spawn_time = i * 20;
+                    g.enemies = generateEnemies();
+                    outData.Add(g);
                 }
-                return g;
+                return outData;
+            }
+            public List<Wave> generateWaves() {
+                List<Wave> dataOut = new List<Wave>();
+                for (int i = 0; i < rnd.Next(5); i++) {
+                    Wave w = new Wave();
+                    w.groups = generateGroups();
+                    dataOut.Add(w);
+                }
+                return dataOut;
+            }
+            public List<Challenge> generateChallenges() {
+                List<Challenge> dataOut = new List<Challenge>();
+                for (int i = 0; i < rnd.Next(2, 4); i++) {
+                    Challenge c = new Challenge();
+                    c.waves = generateWaves();
+                    dataOut.Add(c);
+                }
+                return dataOut;
             }
             public FakeLevel() {
-                
+                name = "funmap";
+                victoryPoints = 25;
                 info.displayName = "fake";
                 info.longDescription = "fakeShortDescription";
                 info.shortDescription = "fakeLongDescription";
-
-                challenges = new List<Challenge>(2);
-                challenges[0].waves = new List<Wave>(3);
-                challenges[0].waves[0].time_limit = 10;
-                challenges[0].waves[0].wave_name = "";
-                challenges[0].waves[0].groups
-
-
-
+                this.challenges = generateChallenges();
             }
         }
+        
     }
 }
