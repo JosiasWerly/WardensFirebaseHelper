@@ -100,17 +100,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class GoblinBomber {
-        public Abilities abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData hp_data { get; set; }
-        public InfoData2 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class GoblinBomber : Enemy { }
 
     public class AttackProperties3 {
         public int AOEDamage { get; set; }
@@ -206,17 +196,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class GoblinCrossbow {
-        public Abilities2 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData2 hp_data { get; set; }
-        public InfoData4 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class GoblinCrossbow : Enemy { }
 
     public class AttackProperties5 {
         public int AOEDamage { get; set; }
@@ -312,17 +292,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class GoblinGunner {
-        public Abilities3 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData3 hp_data { get; set; }
-        public InfoData6 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class GoblinGunner : Enemy { }
 
     public class AttackProperties7 {
         public int AOEDamage { get; set; }
@@ -418,17 +388,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class GoblinMelee {
-        public Abilities4 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData4 hp_data { get; set; }
-        public InfoData8 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class GoblinMelee : Enemy { }
 
     public class AttackProperties9 {
         public int AOEDamage { get; set; }
@@ -524,17 +484,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class Huntress {
-        public Abilities5 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData5 hp_data { get; set; }
-        public InfoData10 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class Huntress : Enemy { }
 
     public class AttackProperties11 {
         public int AOEDamage { get; set; }
@@ -630,17 +580,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class OrcAxeThrower {
-        public Abilities6 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData6 hp_data { get; set; }
-        public InfoData12 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class OrcAxeThrower : Enemy { }
 
     public class AttackProperties13 {
         public int AOEDamage { get; set; }
@@ -910,17 +850,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class OrcCommander {
-        public Abilities7 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData7 hp_data { get; set; }
-        public InfoData17 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class OrcCommander : Enemy { }
 
     public class AttackProperties18 {
         public int AOEDamage { get; set; }
@@ -1016,17 +946,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class OrcCrossbow {
-        public Abilities8 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData8 hp_data { get; set; }
-        public InfoData19 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class OrcCrossbow : Enemy { }
 
     public class AttackProperties20 {
         public int AOEDamage { get; set; }
@@ -1122,17 +1042,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class OrcMelee {
-        public Abilities9 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData9 hp_data { get; set; }
-        public InfoData21 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class OrcMelee : Enemy { }
 
     public class AttackProperties22 {
         public int AOEDamage { get; set; }
@@ -1228,17 +1138,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class ShamanFireball {
-        public Abilities10 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData10 hp_data { get; set; }
-        public InfoData23 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class ShamanFireball : Enemy { }
 
     public class AttackProperties24 {
         public int AOEDamage { get; set; }
@@ -1334,17 +1234,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class ShamanFirecaller {
-        public Abilities11 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData11 hp_data { get; set; }
-        public InfoData25 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class ShamanFirecaller : Enemy { }
 
     public class AttackProperties26 {
         public int AOEDamage { get; set; }
@@ -1440,17 +1330,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class TrollMelee {
-        public Abilities12 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData12 hp_data { get; set; }
-        public InfoData27 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class TrollMelee : Enemy { }
 
     public class AttackProperties28 {
         public int AOEDamage { get; set; }
@@ -1546,17 +1426,7 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class TrollRanged {
-        public Abilities13 abilities { get; set; }
-        public string classification { get; set; }
-        public int dangerLevel { get; set; }
-        public HpData13 hp_data { get; set; }
-        public InfoData29 info_data { get; set; }
-        public int perceptionRange { get; set; }
-        public int souls { get; set; }
-        public int speed { get; set; }
-
-    }
+    public class TrollRanged : Enemy { }
 
     public class AttackProperties30 {
         public int AOEDamage { get; set; }
@@ -1652,35 +1522,20 @@ namespace WardensFirebaseHelper.Structures.Enemies {
 
     }
 
-    public class WolfRider {
-        public Abilities14 abilities { get; set; }
+    public class WolfRider : Enemy { }
+
+    public class Enemy {
+        public Abilities abilities { get; set; }
         public string classification { get; set; }
         public int dangerLevel { get; set; }
-        public HpData14 hp_data { get; set; }
-        public InfoData31 info_data { get; set; }
+        public HpData hp_data { get; set; }
+        public InfoData2 info_data { get; set; }
         public int perceptionRange { get; set; }
         public int souls { get; set; }
         public int speed { get; set; }
-
     }
 
-    public class Enemies {
-        public GoblinBomber goblin_bomber { get; set; }
-        public GoblinCrossbow goblin_crossbow { get; set; }
-        public GoblinGunner goblin_gunner { get; set; }
-        public GoblinMelee goblin_melee { get; set; }
-        public Huntress huntress { get; set; }
-        public OrcAxeThrower orc_axe_thrower { get; set; }
-        public OrcCommander orc_commander { get; set; }
-        public OrcCrossbow orc_crossbow { get; set; }
-        public OrcMelee orc_melee { get; set; }
-        public ShamanFireball shaman_fireball { get; set; }
-        public ShamanFirecaller shaman_firecaller { get; set; }
-        public TrollMelee troll_melee { get; set; }
-        public TrollRanged troll_ranged { get; set; }
-        public WolfRider wolf_rider { get; set; }
-
-    }
+    public class Enemies : Dictionary<string, Enemy> { }
 
     public class Root {
         public Enemies Enemies { get; set; }

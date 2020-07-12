@@ -64,12 +64,9 @@ namespace WardensFirebaseHelper.Structures.Levels {
 
     public class Woodlandrun : Level { }
 
-    public class Levels : Dictionary<string, Level> {
-        Dictionary<string, Level> levelByLevelName;
-    }
+    public class Levels : Dictionary<string, Level> { }
 
     public class Root {
         public Levels Levels { get; set; }
-
     }
 }
