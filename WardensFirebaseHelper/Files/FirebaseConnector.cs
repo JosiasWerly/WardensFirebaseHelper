@@ -99,7 +99,9 @@ namespace WardensFirebaseHelper.Files {
             saveToLocal();
         }
         public void uploadDB() {
-            throw new System.InvalidOperationException("not done yet");
+            if (dbData == null)
+                throw new System.InvalidOperationException("dbLocalNotFound");
+            fb.uploadJson("", dbData);
         }
         public void loadFromLocal() {
             if (File.Exists(dbLocalPath))
