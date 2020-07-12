@@ -52,7 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Files\Disposer.cs" />
     <Compile Include="Files\FirebaseConnector.cs" />
+    <Compile Include="Files\WaveStructures.cs" />
     <Compile Include="Forms\Editor.cs">
       <SubType>Form</SubType>
     </Compile>

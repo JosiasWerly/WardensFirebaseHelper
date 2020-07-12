@@ -7,6 +7,10 @@ using System.Net.Http.Headers;
 using System.Text;
 
 namespace WardensFirebaseHelper.Files {
+    public class AAA {
+        public string A { get;  }
+    }
+
     public class FirebaseConnector {
         string dbURL, dbPassword;
         public FirebaseConnector() { }
