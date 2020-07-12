@@ -62,13 +62,17 @@ namespace WardensFirebaseHelper.Forms {
             for (int i = 0; i < dbWorker.GetChallengeCountOf(CurrentLevelName); i++) {
                 challengesComboBox.Items.Add(i);
             }
+
+            SetWavesTabVisibility(IsSelectionValid());
         }
 
         private void challengesComboBox_SelectedIndexChanged(object sender, EventArgs e) {
             waveTabs.Visible = true;
             waveTabs.TabPages.Clear();
 
-            if(CurrentChallenge >= 0) {
+            SetWavesTabVisibility(IsSelectionValid());
+
+            if (CurrentChallenge >= 0) {
                 for (int i = 0; i < dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge); i++) {
                     waveTabs.TabPages.Add(new TabPage() {
                         BackColor = Color.White,
@@ -143,6 +147,14 @@ namespace WardensFirebaseHelper.Forms {
             panel.Controls.Add(timesLabel);
 
             return panel;
+        }
+
+        private void SetWavesTabVisibility(bool visible) {
+            waveTabs.Visible = visible;
+        }
+        private bool IsSelectionValid() {
+            return (mapComboBox.SelectedIndex >= 0 && mapComboBox.SelectedIndex <= mapComboBox.Items.Count)
+                    && (challengesComboBox.SelectedIndex >= 0 && challengesComboBox.SelectedIndex < challengesComboBox.Items.Count);
         }
     }
 }
