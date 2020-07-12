@@ -18,9 +18,10 @@ namespace WardensFirebaseHelper.Forms {
         
         public Editor() {            
             InitializeComponent();
-            FakeLevel f = new FakeLevel();
-            var d = dataBaseInterface.dbData;
-            
+            var d = dataBaseInterface.dbData;            
+            Root r = d["Levels"].ToObject<Root>();
+
+
         }
     }
 }
