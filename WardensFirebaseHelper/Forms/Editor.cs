@@ -27,6 +27,13 @@ namespace WardensFirebaseHelper.Forms {
         public IEnumerable<string> availableEnemies;
     }
 
+    public struct UnitPanelStructures {
+        public ComboBox cb_enemyClass;
+        public TextBox tb_spawnPoint;
+        public TextBox tb_spawnTime;
+        public TextBox tb_quantity;
+    }
+
     public partial class Editor : Form {
         public const int UNIT_CARD_SIZE = 40;
 
@@ -35,15 +42,15 @@ namespace WardensFirebaseHelper.Forms {
         public string CurrentLevelName => mapComboBox.Text;
 
 
-        FirebaseInterface dataBaseInterface = new FirebaseInterface(Application.StartupPath + "\\dbLocal.json");
+        FirebaseInterface dataBaseInterface;
+
         Worker dbWorker;
 
         public Editor() {
-            try {
-                dbWorker = new Worker(dataBaseInterface.dbData);
-            }
+            dataBaseInterface = new FirebaseInterface(Application.StartupPath + "\\dbLocal.json");
 
             // Some cached keys can be invalid and require the db to be download again
+            try { dbWorker = new Worker(dataBaseInterface.dbData); }
             catch (SystemException) {
                 dataBaseInterface.downloadDB();
                 dbWorker = new Worker(dataBaseInterface.dbData);
@@ -88,7 +95,10 @@ namespace WardensFirebaseHelper.Forms {
 
                         int enemyCount = dbWorker.GetEnemyCountOf(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex);
                         for (int enemyIndex = 0; enemyIndex < enemyCount; enemyIndex++) {
-                            Panel panel = ConstructUnitCard(new UnitPanelConfiguration() {
+                            Panel panel;
+                            UnitPanelStructures panelStructures;
+
+                            (panel, panelStructures) = ConstructUnitCard(new UnitPanelConfiguration() {
                                 index = enemyListIndex,
                                 color = enemyListIndex % 2 == 0 ? Color.Bisque : Color.OldLace,
 
@@ -111,7 +121,8 @@ namespace WardensFirebaseHelper.Forms {
             }
         }
 
-        private Panel ConstructUnitCard(UnitPanelConfiguration panelConfiguration) {
+
+        private (Panel, UnitPanelStructures) ConstructUnitCard(UnitPanelConfiguration panelConfiguration) {
             Panel panel = new Panel() {
                 BackColor = panelConfiguration.color,
 
@@ -204,7 +215,13 @@ namespace WardensFirebaseHelper.Forms {
             };
             panel.Controls.Add(deleteButton);
 
-            return panel;
+            UnitPanelStructures structure = new UnitPanelStructures() {
+                cb_enemyClass = spawnCombobox,
+                tb_quantity = ammountTextBox,
+                tb_spawnPoint = spawnTextBox,
+                tb_spawnTime = afterTextBox,
+            };
+            return (panel, structure);
         }
 
         private void SetWavesTabVisibility(bool visible) {
