@@ -20,7 +20,8 @@ namespace WardensFirebaseHelper.Forms {
         public Point point;
         public Color color;
 
-        public int maxSpawnCount;
+        public int spawnTime;
+        public string spawnEnemyAt;
         public string selectedEnemy;
         public int selectedEnemyQuantity;
         public IEnumerable<string> availableEnemies;
@@ -49,8 +50,8 @@ namespace WardensFirebaseHelper.Forms {
             }
             
             InitializeComponent();
+            SetWavesTabVisibility(false);
 
-            waveTabs.Visible = false;
             foreach (var mapName in dbWorker.GetLevelNames())
                 mapComboBox.Items.Add(mapName);
         }
@@ -67,36 +68,44 @@ namespace WardensFirebaseHelper.Forms {
         }
 
         private void challengesComboBox_SelectedIndexChanged(object sender, EventArgs e) {
-            waveTabs.Visible = true;
             waveTabs.TabPages.Clear();
-
             SetWavesTabVisibility(IsSelectionValid());
 
             if (CurrentChallenge >= 0) {
-                for (int i = 0; i < dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge); i++) {
+                int waveCount = dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge);
+                for (int waveIndex = 0; waveIndex < waveCount; waveIndex++) {
                     waveTabs.TabPages.Add(new TabPage() {
                         BackColor = Color.White,
                         AutoScroll = true,
 
-                        Name = $"waveTab{i}",
-                        Text = $"Wave [{i}]",
+                        Name = $"waveTab{waveIndex}",
+                        Text = $"Wave [{waveIndex}]",
                     });
 
+                    int enemyListIndex = 0;
+                    int groupCount = dbWorker.GetGroupCountOf(CurrentLevelName, CurrentChallenge, waveIndex);
+                    for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
 
-                    for (int j = 0; j < dbWorker.GetEnemyCountOf(CurrentLevelName, CurrentChallenge, i); j++) {
-                        var panel = ConstructUnitCard(new UnitPanelConfiguration() {
-                            index = j,
-                            color = j % 2 == 0 ? Color.Bisque : Color.OldLace,
+                        int enemyCount = dbWorker.GetEnemyCountOf(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex);
+                        for (int enemyIndex = 0; enemyIndex < enemyCount; enemyIndex++) {
+                            Panel panel = ConstructUnitCard(new UnitPanelConfiguration() {
+                                index = enemyListIndex,
+                                color = enemyListIndex % 2 == 0 ? Color.Bisque : Color.OldLace,
 
-                            size = new Size(waveTabs.TabPages[i].Width, UNIT_CARD_SIZE),
-                            point = new Point(0, j * UNIT_CARD_SIZE),
-                            maxSpawnCount = 30,
+                                size = new Size(750, UNIT_CARD_SIZE),
+                                point = new Point(0, enemyListIndex * UNIT_CARD_SIZE),
 
-                            availableEnemies = dbWorker.GetEnemyNames(),
-                            selectedEnemy = dbWorker.GetEnemyByIndex(CurrentLevelName, CurrentChallenge, i, j),
-                            selectedEnemyQuantity = dbWorker.GetEnemyQuantityByIndex(CurrentLevelName, CurrentChallenge, i, j)
-                        });
-                        waveTabs.TabPages[i].Controls.Add(panel);
+                                availableEnemies = dbWorker.GetEnemyNames(),
+
+                                spawnEnemyAt = dbWorker.GetSpawnLocationOf(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex),
+                                selectedEnemy = dbWorker.GetEnemyByIndex(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex, enemyIndex),
+                                selectedEnemyQuantity = dbWorker.GetSpawnQuantityOf(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex, enemyIndex),
+                                spawnTime = dbWorker.GetSpawnTimeOf(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex),
+                            });
+
+                            enemyListIndex++;
+                            waveTabs.TabPages[waveIndex].Controls.Add(panel);
+                        }
                     }
                 }
             }
@@ -114,14 +123,14 @@ namespace WardensFirebaseHelper.Forms {
             Label spawnLabel = new Label() {
                 Anchor = AnchorStyles.Top | AnchorStyles.Left,
                 Location = new Point(3, panel.Height / 3),
-                Size = new Size(45, panel.Height / 2),
-                Text = "Spawn: ",
+                Size = new Size(80, panel.Height / 2),
+                Text = $"[{panelConfiguration.index}] Spawn: ",
             };
             panel.Controls.Add(spawnLabel);
 
             ComboBox spawnCombobox = new ComboBox() {
                 Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(50, panel.Height / 4),
+                Location = new Point(85, panel.Height / 4),
                 Size = new Size(150, panel.Height/2),
             };
             foreach (string item in panelConfiguration.availableEnemies)
@@ -132,7 +141,7 @@ namespace WardensFirebaseHelper.Forms {
 
             TextBox ammountTextBox = new TextBox() {
                 Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(203, panel.Height / 4),
+                Location = new Point(238, panel.Height / 4),
                 Size = new Size(30, panel.Height / 2),
                 Text = panelConfiguration.selectedEnemyQuantity.ToString(),
             };
@@ -140,18 +149,68 @@ namespace WardensFirebaseHelper.Forms {
 
             Label timesLabel = new Label() {
                 Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(233, panel.Height / 3),
-                Size = new Size(45, panel.Height / 2),
-                Text = "Times",
+                Location = new Point(268, panel.Height / 3),
+                Size = new Size(40, panel.Height / 2),
+                Text = "Times,",
             };
             panel.Controls.Add(timesLabel);
+
+            Label spawnAtLabel = new Label() {
+                Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                Location = new Point(308, panel.Height / 3),
+                Size = new Size(25, panel.Height / 2),
+                Text = "At:",
+            };
+            panel.Controls.Add(spawnAtLabel);
+
+            TextBox spawnTextBox = new TextBox() {
+                Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                Location = new Point(335, panel.Height / 4),
+                Size = new Size(100, panel.Height / 2),
+                Text = panelConfiguration.spawnEnemyAt,
+            };
+            panel.Controls.Add(spawnTextBox);
+
+            Label afterLabel = new Label() {
+                Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                Location = new Point(440, panel.Height / 3),
+                Size = new Size(40, panel.Height / 2),
+                Text = "After:",
+            };
+            panel.Controls.Add(afterLabel);
+
+            TextBox afterTextBox = new TextBox() {
+                Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                Location = new Point(485, panel.Height / 4),
+                Size = new Size(30, panel.Height / 2),
+                Text = panelConfiguration.spawnTime.ToString(),
+            };
+            panel.Controls.Add(afterTextBox);
+
+            Label secondsLabel = new Label() {
+                Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                Location = new Point(520, panel.Height / 3),
+                Size = new Size(60, panel.Height / 2),
+                Text = "Seconds.",
+            };
+            panel.Controls.Add(secondsLabel);
+
+            Button deleteButton = new Button() {
+                Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                Location = new Point(585, panel.Height / 3),
+                Size = new Size(60, panel.Height / 2),
+                BackColor = Color.WhiteSmoke,
+                Text = "Delete",
+            };
+            panel.Controls.Add(deleteButton);
 
             return panel;
         }
 
         private void SetWavesTabVisibility(bool visible) {
-            waveTabs.Visible = visible;
+            splitContainer.Visible = visible;
         }
+
         private bool IsSelectionValid() {
             return (mapComboBox.SelectedIndex >= 0 && mapComboBox.SelectedIndex <= mapComboBox.Items.Count)
                     && (challengesComboBox.SelectedIndex >= 0 && challengesComboBox.SelectedIndex < challengesComboBox.Items.Count);

@@ -45,15 +45,23 @@
             this.button2 = new System.Windows.Forms.Button();
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // waveTabs
             // 
-            this.waveTabs.Location = new System.Drawing.Point(12, 78);
+            this.waveTabs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.waveTabs.Location = new System.Drawing.Point(3, 3);
             this.waveTabs.Name = "waveTabs";
             this.waveTabs.SelectedIndex = 0;
-            this.waveTabs.Size = new System.Drawing.Size(437, 403);
+            this.waveTabs.Size = new System.Drawing.Size(678, 397);
             this.waveTabs.TabIndex = 0;
             // 
             // mapComboBox
@@ -69,12 +77,15 @@
             // 
             // panel3
             // 
+            this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.panel3.Controls.Add(this.textBox6);
             this.panel3.Controls.Add(this.textBox3);
-            this.panel3.Location = new System.Drawing.Point(451, 78);
+            this.panel3.Location = new System.Drawing.Point(3, 25);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(231, 403);
+            this.panel3.Size = new System.Drawing.Size(249, 375);
             this.panel3.TabIndex = 4;
             // 
             // textBox6
@@ -95,16 +106,19 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(598, 12);
+            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button4.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.button4.Location = new System.Drawing.Point(868, 12);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(84, 23);
             this.button4.TabIndex = 4;
             this.button4.Text = "Load";
-            this.button4.UseVisualStyleBackColor = true;
+            this.button4.UseVisualStyleBackColor = false;
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(598, 49);
+            this.button5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button5.Location = new System.Drawing.Point(868, 49);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(84, 23);
             this.button5.TabIndex = 5;
@@ -115,7 +129,7 @@
             // 
             this.challengesComboBox.DisplayMember = "enemy";
             this.challengesComboBox.FormattingEnabled = true;
-            this.challengesComboBox.Location = new System.Drawing.Point(342, 12);
+            this.challengesComboBox.Location = new System.Drawing.Point(108, 44);
             this.challengesComboBox.Name = "challengesComboBox";
             this.challengesComboBox.Size = new System.Drawing.Size(49, 21);
             this.challengesComboBox.TabIndex = 6;
@@ -134,7 +148,7 @@
             // challengeLabel
             // 
             this.challengeLabel.AutoSize = true;
-            this.challengeLabel.Location = new System.Drawing.Point(243, 17);
+            this.challengeLabel.Location = new System.Drawing.Point(9, 49);
             this.challengeLabel.Name = "challengeLabel";
             this.challengeLabel.Size = new System.Drawing.Size(93, 13);
             this.challengeLabel.TabIndex = 8;
@@ -231,25 +245,47 @@
             this.label2.TabIndex = 10;
             this.label2.Text = "Please, select a map and challenge to continue.";
             // 
+            // splitContainer
+            // 
+            this.splitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer.Location = new System.Drawing.Point(12, 78);
+            this.splitContainer.Name = "splitContainer";
+            // 
+            // splitContainer.Panel1
+            // 
+            this.splitContainer.Panel1.Controls.Add(this.waveTabs);
+            // 
+            // splitContainer.Panel2
+            // 
+            this.splitContainer.Panel2.Controls.Add(this.panel3);
+            this.splitContainer.Size = new System.Drawing.Size(940, 403);
+            this.splitContainer.SplitterDistance = 684;
+            this.splitContainer.TabIndex = 11;
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(694, 492);
+            this.ClientSize = new System.Drawing.Size(964, 492);
+            this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.challengeLabel);
             this.Controls.Add(this.mapLabel);
             this.Controls.Add(this.challengesComboBox);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
-            this.Controls.Add(this.panel3);
             this.Controls.Add(this.mapComboBox);
-            this.Controls.Add(this.waveTabs);
             this.Controls.Add(this.label2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Editor";
             this.Text = "Wardens Wave Editor";
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -277,5 +313,6 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.TextBox textBox4;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.SplitContainer splitContainer;
     }
 }

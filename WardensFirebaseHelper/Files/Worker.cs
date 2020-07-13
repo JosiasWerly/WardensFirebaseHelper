@@ -54,20 +54,11 @@ namespace WardensFirebaseHelper.Files {
                    select map;
         }
 
-        public int GetEnemyQuantityByIndex(string levelName, int challengeIndex, int waveIndex, int enemyIndex) {
-            int count = 0;
-            for (int i = 0; i < Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups.Count; i++) {
-                for (int j = 0; j < Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[i].enemy_spawn.Count; j++) {
-                    if (enemyIndex.Equals(count)) {
-                        return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[i].enemy_spawn[j].quantity;
-                    }
-
-                    count++;
-
-                }
-            }
-
-            return 0;
+        public int GetSpawnQuantityOf(string levelName, int challengeIndex, int waveIndex, int groupIndex, int enemyIndex) {
+            return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[groupIndex].enemy_spawn[enemyIndex].quantity;
+        }
+        public string GetEnemyByIndex(string levelName, int challengeIndex, int waveIndex, int groupIndex, int enemyIndex) {
+            return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[groupIndex].enemy_spawn[enemyIndex].enemy_class;
         }
         public string GetEnemyByIndex(string levelName, int challengeIndex, int waveIndex, int enemyIndex) {
             //return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[]
@@ -84,6 +75,31 @@ namespace WardensFirebaseHelper.Files {
 
             return string.Empty;
         }
+        public string GetSpawnLocationOf(string levelName, int challengeIndex, int waveIndex, int groupIndex) {
+            return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[groupIndex].spawn_location;
+        }
+
+        public int GetEnemySpawnQuantityByIndex(string levelName, int challengeIndex, int waveIndex, int enemyIndex) {
+            int count = 0;
+            for (int i = 0; i < Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups.Count; i++) {
+                for (int j = 0; j < Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[i].enemy_spawn.Count; j++) {
+                    if (enemyIndex.Equals(count)) {
+                        return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[i].enemy_spawn[j].quantity;
+                    }
+
+                    count++;
+
+                }
+            }
+
+            return 0;
+        }
+        public int GetSpawnTimeOf(string levelName, int challengeIndex, int waveIndex, int groupIndex) {
+            return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[groupIndex].spawn_time;
+        }
+        public int GetGroupCountOf(string levelName, int challengeIndex, int waveIndex) {
+            return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups.Count;
+        }
         public int GetWaveCountOf(string levelName, int challengeIndex) {
             return Levels[levelName].challenges[challengeIndex].waves.Count;
         }
@@ -92,6 +108,9 @@ namespace WardensFirebaseHelper.Files {
         }
 
 
+        public int GetEnemyCountOf(string levelName, int challengeIndex, int waveIndex, int groupIndex) {
+            return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[groupIndex].enemy_spawn.Count;
+        }
         public int GetEnemyCountOf(string levelName, int challengeIndex, int waveIndex) {
             int count = 0;
             for (int i = 0; i < Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups.Count; i++) {
