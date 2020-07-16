@@ -15,9 +15,11 @@ namespace WardensFirebaseHelper.Files {
         const string ENEMIES_KEY = "Enemies";
         const string LEVELS_KEY = "Levels";
 
-        JObject database;
-        Levels Levels { get; set; }
+        public JObject DataBase => database;
+
         Enemies Enemies { get; set; }
+        Levels Levels { get; set; }
+        JObject database;
 
         public Worker(JObject database) {
             this.database = database;
@@ -124,16 +126,16 @@ namespace WardensFirebaseHelper.Files {
 
             return count;
         }
-
         public Group GetGroup(string levelName, int challengeIndex, int waveIndex, int groupIndex) {
             return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[groupIndex];
         }
 
+        public void ApplyLevelChanges() => database[LEVELS_KEY] = JToken.FromObject(Levels);
+        public void ApplyEnemyChanges() => database[ENEMIES_KEY] = JToken.FromObject(Enemies);
 
-        public void Rebuild(string levelName, int challengeIndex, int waveIndex, IEnumerable<Group> groups) {
-            for (int groupIndex = 0; groupIndex < Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups.Count; groupIndex++) {
-                Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[groupIndex] = groups.ElementAt(groupIndex);
-            }
+        void foo() {
+            var tok = database[LEVELS_KEY];
+            //tok.a
         }
     }
 }

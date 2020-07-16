@@ -28,12 +28,13 @@ namespace WardensFirebaseHelper.Forms {
         public const int TABS_WIDTH = 750;
         public const int TABS_HEIGHT = 500;
 
+        public IEnumerable<WavePage> CurrentWavePagesCollection => from wavePage in waveTabs.TabPages.Cast<TabPage>() select wavePage as WavePage;
         public int CurrentChallenge => challengesComboBox.Text != string.Empty ? int.Parse(challengesComboBox.Text) : -1;
         public int CurrentWaveIndex => waveTabs.SelectedIndex;
         public string CurrentLevelName => mapComboBox.Text;
 
 
-        Dictionary<string, Dictionary<int, object>> challengesByLevelName = new Dictionary<string, Dictionary<int, object>>();
+        Dictionary<string, Dictionary<int, List<WavePage>>> challengesByLevelName = new Dictionary<string, Dictionary<int, List<WavePage>>>();
         List<TabControl> groupTabList = new List<TabControl>();
         FirebaseInterface dataBaseInterface;
         Worker dbWorker;
@@ -58,6 +59,10 @@ namespace WardensFirebaseHelper.Forms {
             challengesComboBox.Text = string.Empty;
             challengesComboBox.Items.Clear();
 
+            if (!challengesByLevelName.ContainsKey(CurrentLevelName)) {
+                challengesByLevelName.Add(CurrentLevelName, new Dictionary<int, List<WavePage>>());
+            }
+
             for (int i = 0; i < dbWorker.GetChallengeCountOf(CurrentLevelName); i++) {
                 challengesComboBox.Items.Add(i);
             }
@@ -66,44 +71,21 @@ namespace WardensFirebaseHelper.Forms {
         }
 
         private void challengesComboBox_SelectedIndexChanged(object sender, EventArgs e) {
+            //SaveToLocal();
             waveTabs.TabPages.Clear();
             SetWavesTabVisibility(IsSelectionValid());
+
+            if (!challengesByLevelName[CurrentLevelName].ContainsKey(CurrentChallenge)) {
+                challengesByLevelName[CurrentLevelName].Add(CurrentChallenge, new List<WavePage>());
+            }
 
             if (CurrentChallenge >= 0) {
                 int waveCount = dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge);
                 for (int waveIndex = 0; waveIndex < waveCount; waveIndex++) {
                     WavePage wavePage = new WavePage(waveIndex, new Size(TABS_WIDTH, TABS_HEIGHT), dbWorker.GetGroups(CurrentLevelName, CurrentChallenge, waveIndex), dbWorker.GetEnemyNames());
+                    challengesByLevelName[CurrentLevelName][CurrentChallenge].Add(wavePage);
                     waveTabs.TabPages.Add(wavePage);
                 }
-
-
-                //for (int waveIndex = 0; waveIndex < waveCount; waveIndex++) {
-                //    // Create a "Wave page" for each wave
-                //    waveTabs.TabPages.Add(new TabPage() {
-                //        BackColor = Color.White,
-                //        AutoScroll = true,
-
-                //        Name = $"waveTab{waveIndex}",
-                //        Text = $"Wave [{waveIndex}]",
-                //    });
-
-                //    // Create a "Group tab" for each "Wave page"
-                //    // Container of the list of groups in each wave
-                //    TabControl groupTab = new TabControl() {
-                //        Location = new Point(0, 0),
-                //        Size = new Size(TABS_WIDTH, TABS_HEIGHT),
-                //    };
-                //    groupTabList.Add(groupTab);
-
-                //    int groupCount = dbWorker.GetGroupCountOf(CurrentLevelName, CurrentChallenge, waveIndex);
-                //    for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
-                //        // Create a "Group page" for each group
-                //        GroupPage groupPage = new GroupPage($"Group {groupIndex}", dbWorker.GetGroup(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex), dbWorker.GetEnemyNames());
-                //        groupTab.TabPages.Add(groupPage);
-                //    }
-
-                //    waveTabs.TabPages[waveIndex].Controls.Add(groupTab);
-                //}
             }
         }
 
@@ -116,6 +98,14 @@ namespace WardensFirebaseHelper.Forms {
             return (mapComboBox.SelectedIndex >= 0 && mapComboBox.SelectedIndex <= mapComboBox.Items.Count)
                     && (challengesComboBox.SelectedIndex >= 0 && challengesComboBox.SelectedIndex < challengesComboBox.Items.Count);
         }
+        
+        private void SaveToLocal() {
+            dbWorker.ApplyLevelChanges();
+            dataBaseInterface.saveToLocal();
+        }
 
+        private void b_Save_Click(object sender, EventArgs e) {
+            SaveToLocal();
+        }
     }
 }

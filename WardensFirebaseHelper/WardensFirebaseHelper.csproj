@@ -58,7 +58,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Files\Disposer.cs" />
     <Compile Include="Files\FirebaseConnector.cs" />
     <Compile Include="Files\FormHelpers\GroupPage.cs">
       <SubType>Component</SubType>

@@ -31,8 +31,6 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.mapComboBox = new System.Windows.Forms.ComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.button4 = new System.Windows.Forms.Button();
             this.b_Save = new System.Windows.Forms.Button();
             this.challengesComboBox = new System.Windows.Forms.ComboBox();
@@ -50,14 +48,16 @@
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.button1 = new System.Windows.Forms.Button();
             this.waveTabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
-            this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // waveTabs
@@ -69,7 +69,7 @@
             this.waveTabs.Location = new System.Drawing.Point(3, 3);
             this.waveTabs.Name = "waveTabs";
             this.waveTabs.SelectedIndex = 0;
-            this.waveTabs.Size = new System.Drawing.Size(678, 397);
+            this.waveTabs.Size = new System.Drawing.Size(676, 397);
             this.waveTabs.TabIndex = 0;
             // 
             // tabPage1
@@ -77,7 +77,7 @@
             this.tabPage1.Controls.Add(this.tabControl1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(670, 371);
+            this.tabPage1.Size = new System.Drawing.Size(668, 371);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -129,34 +129,16 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.panel3.Controls.Add(this.textBox6);
-            this.panel3.Controls.Add(this.textBox3);
             this.panel3.Location = new System.Drawing.Point(3, 25);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(249, 375);
             this.panel3.TabIndex = 4;
             // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(4, 3);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(100, 20);
-            this.textBox6.TabIndex = 1;
-            this.textBox6.Text = "Infomation";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(4, 61);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 0;
-            this.textBox3.Text = "Infomation";
-            // 
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button4.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.button4.Location = new System.Drawing.Point(868, 12);
+            this.button4.Location = new System.Drawing.Point(93, 3);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(84, 23);
             this.button4.TabIndex = 4;
@@ -166,12 +148,13 @@
             // b_Save
             // 
             this.b_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_Save.Location = new System.Drawing.Point(868, 49);
+            this.b_Save.Location = new System.Drawing.Point(3, 3);
             this.b_Save.Name = "b_Save";
             this.b_Save.Size = new System.Drawing.Size(84, 23);
             this.b_Save.TabIndex = 5;
             this.b_Save.Text = "Save";
             this.b_Save.UseVisualStyleBackColor = true;
+            this.b_Save.Click += new System.EventHandler(this.b_Save_Click);
             // 
             // challengesComboBox
             // 
@@ -308,21 +291,41 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.panel3);
-            this.splitContainer.Size = new System.Drawing.Size(940, 403);
-            this.splitContainer.SplitterDistance = 684;
+            this.splitContainer.Size = new System.Drawing.Size(938, 403);
+            this.splitContainer.SplitterDistance = 682;
             this.splitContainer.TabIndex = 11;
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.b_Save);
+            this.flowLayoutPanel1.Controls.Add(this.button4);
+            this.flowLayoutPanel1.Controls.Add(this.button1);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(443, 12);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(507, 53);
+            this.flowLayoutPanel1.TabIndex = 12;
+            // 
+            // button1
+            // 
+            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.button1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.button1.Location = new System.Drawing.Point(183, 3);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(84, 23);
+            this.button1.TabIndex = 13;
+            this.button1.Text = "Load";
+            this.button1.UseVisualStyleBackColor = false;
             // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(964, 492);
+            this.ClientSize = new System.Drawing.Size(962, 492);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.challengeLabel);
             this.Controls.Add(this.mapLabel);
             this.Controls.Add(this.challengesComboBox);
-            this.Controls.Add(this.b_Save);
-            this.Controls.Add(this.button4);
             this.Controls.Add(this.mapComboBox);
             this.Controls.Add(this.label2);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -331,12 +334,11 @@
             this.waveTabs.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -346,8 +348,6 @@
         private System.Windows.Forms.TabControl waveTabs;
         private System.Windows.Forms.ComboBox mapComboBox;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox6;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button b_Save;
         private System.Windows.Forms.ComboBox challengesComboBox;
@@ -369,5 +369,7 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button button1;
     }
 }

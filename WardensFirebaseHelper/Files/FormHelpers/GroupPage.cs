@@ -28,11 +28,28 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
         public IEnumerable<string> availableEnemies;
     }
 
-    public class EnemyPanel : Panel {
-        public ComboBox EnemySpawnComboBox { get; private set; }
-        public TextBox EnemyAmountTextBox { get; private set; }        
+    public class GroupReplicativePanel : Panel {
+        
+        public Group Group { get; private set; }
 
-        public EnemyPanel(string initialSpawnClass, int initialAmount, EnemyPanelConfig config) {
+        public GroupReplicativePanel(Group group) {
+            Group = group;
+        }
+    }
+
+    public class EnemyReplicativePanel : GroupReplicativePanel {
+        public int Index { get; private set; }
+
+        public EnemyReplicativePanel(int index, Group group) : base(group) {
+            Index = index;
+        }
+    }
+
+    public class EnemyPanel : EnemyReplicativePanel {
+        public ComboBox EnemySpawnComboBox { get; private set; }
+        public TextBox EnemyAmountTextBox { get; private set; }
+
+        public EnemyPanel(int index, Group group, EnemyPanelConfig config) : base(index, group) {
             // Panel setup
             {
                 this.Size = config.size;
@@ -55,7 +72,7 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
                     Anchor = AnchorStyles.Top | AnchorStyles.Left,
                     Location = new Point(85, this.Height / 4),
                     Size = new Size(30, this.Height / 2),
-                    Text = initialAmount.ToString(),
+                    Text = group.enemy_spawn[index].quantity.ToString(),
                 };
                 this.EnemyAmountTextBox = ammountTextBox;
                 this.Controls.Add(ammountTextBox);
@@ -74,7 +91,7 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
 
                 this.Controls.Add(spawnCombobox);
                 this.EnemySpawnComboBox = spawnCombobox;
-                this.EnemySpawnComboBox.SelectedItem = initialSpawnClass;
+                this.EnemySpawnComboBox.SelectedItem = group.enemy_spawn[index].enemy_class;
             }
 
             // Delete button
@@ -88,111 +105,122 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
                 };
                 this.Controls.Add(deleteButton);
             }
+
+            // Replicates enemy_spawn.enemy_class changes to group
+            EnemySpawnComboBox.TextChanged += HandleSpawnClassChanged;
+
+            // Replicates enemy_spawn.quantity changes to group
+            EnemyAmountTextBox.TextChanged += HandleQuantityChanged;
+        }
+
+        void HandleQuantityChanged(object sender, EventArgs args) {
+            if (int.TryParse((sender as TextBox).Text, out int value)) {
+                Group.enemy_spawn[Index].quantity = value;
+            }
+        }
+
+        void HandleSpawnClassChanged(object sender, EventArgs args) {
+            Group.enemy_spawn[Index].enemy_class = (sender as ComboBox).Text;
         }
     }
 
-    public class GroupPanel : Panel {
+    public class GroupPanel : GroupReplicativePanel {
         public TextBox SpawnLocation { get; }
         public TextBox SpawnTime { get; }
 
-        public GroupPanel(string spawnLocation, int spawnTime, Size size) {
-            Label spawnLabel = new Label() {
-                Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(3, 5),
-                Size = new Size(80, 30),
-                Text = "Spawn location:",
-            };
-            this.Controls.Add(spawnLabel);
+        public GroupPanel(Group group, Size size) : base(group) {
+            // Setup
+            {
+                this.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+                this.BorderStyle = BorderStyle.FixedSingle;
+                this.BackColor = Color.Tomato;
+                this.Location = new Point(0, 0);
+                this.Size = size;
+            }
 
-            TextBox spawnTextBox = new TextBox() {
-                Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(85, 10),
-                Size = new Size(150, 30),
-                Text = spawnLocation,
-            };
-            this.SpawnLocation = spawnTextBox;
-            this.Controls.Add(spawnTextBox);
+            // Spawn location
+            {
+                Label spawnLabel = new Label() {
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                    Location = new Point(3, 5),
+                    Size = new Size(80, 30),
+                    Text = "Spawn location:",
+                };
+                this.Controls.Add(spawnLabel);
 
-            Label timeLabel = new Label() {
-                Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(250, 10),
-                Size = new Size(80, 30),
-                Text = "Spawn time:",
-            };
-            this.Controls.Add(timeLabel);
+                SpawnLocation = new TextBox() {
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                    Location = new Point(85, 10),
+                    Size = new Size(150, 30),
+                    Text = Group.spawn_location,
+                };
+                this.Controls.Add(SpawnLocation);
+            }
 
-            TextBox spawnTimeTextBox = new TextBox() {
-                Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(340, 10),
-                Size = new Size(60, this.Height / 2),
-                Text = spawnTime.ToString(),
-            };
+            // Spawn time
+            {
+                Label timeLabel = new Label() {
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                    Location = new Point(250, 10),
+                    Size = new Size(80, 30),
+                    Text = "Spawn time:",
+                };
+                this.Controls.Add(timeLabel);
 
-            this.SpawnTime = spawnTimeTextBox;
-            this.Controls.Add(spawnTimeTextBox);
+                SpawnTime = new TextBox() {
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                    Location = new Point(340, 10),
+                    Size = new Size(60, this.Height / 2),
+                    Text = Group.spawn_time.ToString(),
+                };
+                this.Controls.Add(SpawnTime);
+            }
 
-            this.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-            this.BorderStyle = BorderStyle.FixedSingle;
-            this.BackColor = Color.Tomato;
-            this.Location = new Point(0, 0);
-            this.Size = size;
+            // Method bindings
+
+            // Replicates spawn_texbox changes to group
+            SpawnLocation.TextChanged += HandleSpawnLocationChanged;
+
+            // Replicates time_texbox changes to group
+            SpawnTime.TextChanged += HandleSpawnTimeChanged;
+        }
+
+        void HandleSpawnLocationChanged(object sender, EventArgs args) {
+            Group.spawn_location = (sender as TextBox).Text;
+        }
+
+        void HandleSpawnTimeChanged(object sender, EventArgs args) {
+            if (int.TryParse((sender as TextBox).Text, out int value)) {
+                Group.spawn_time = value;
+            }
         }
     }
 
     public class GroupPage : System.Windows.Forms.TabPage {
         public const int UNIT_CARD_SIZE = 40;
-        Group group;
+        public Group Group { get; private set; }
 
         public GroupPage(string name,  Group group, IEnumerable<string> availableEnemies) {
-            this.group = group;
+            Group = group;
             this.BackColor = Color.White;
             this.Text = this.Name = name;
 
-            for (int i = 0; i < group.enemy_spawn.Count; i++) {
-                GroupPanel groupPanel = new GroupPanel(group.spawn_location, group.spawn_time, new Size(750, UNIT_CARD_SIZE));
-                EnemyPanel enemyPanel = new EnemyPanel(GetEnemyClass(i), GetSpawnAmount(i), new EnemyPanelConfig {
-                    index = i,
-                    color = i % 2 == 0 ? Color.Bisque : Color.OldLace,
+            GroupPanel groupPanel = new GroupPanel(group, new Size(750, UNIT_CARD_SIZE));
+            this.Controls.Add(groupPanel);
+
+            for (int enemyIndex = 0; enemyIndex < group.enemy_spawn.Count; enemyIndex++) {
+                EnemyPanel enemyPanel = new EnemyPanel(enemyIndex, Group, new EnemyPanelConfig {
+                    index = enemyIndex,
+                    color = enemyIndex % 2 == 0 ? Color.Bisque : Color.OldLace,
 
                     size = new Size(750, UNIT_CARD_SIZE),
-                    location = new Point(0, (i + 1) * UNIT_CARD_SIZE),
+                    location = new Point(0, (enemyIndex + 1) * UNIT_CARD_SIZE),
 
                     availableEnemies = availableEnemies,
                 });
-
-                // Method bindings
-                // Replicates spawn_texbox changes to group
-                groupPanel.SpawnLocation.TextChanged += (object sender, EventArgs args) => {
-                    group.spawn_location = (sender as TextBox).Text;
-                };
-
-                // Replicates time_texbox changes to group
-                groupPanel.SpawnTime.TextChanged += (object sender, EventArgs args) => {
-                    if (int.TryParse((sender as TextBox).Text, out int value)) {
-                        group.spawn_time = value;
-                    }
-                };
-
-                // Replicates enemy_spawn.enemy_class changes to group
-                enemyPanel.EnemySpawnComboBox.TextChanged += (object sender, EventArgs args) => {
-                    group.enemy_spawn[i].enemy_class = (sender as ComboBox).Text;
-                };
-
-                // Replicates enemy_spawn.quantity changes to group
-                enemyPanel.EnemyAmountTextBox.TextChanged += (object sender, EventArgs args) => {
-                    if (int.TryParse((sender as TextBox).Text, out int value)) {
-                        group.enemy_spawn[i].quantity = value;
-                    }
-                };
-
-                // Add panels to this page
-                this.Controls.Add(groupPanel);
                 this.Controls.Add(enemyPanel);
             }
         }
-
-        string GetEnemyClass(int index) => group.enemy_spawn[index].enemy_class;
-        int GetSpawnAmount(int index) => group.enemy_spawn[index].quantity;
     }
 
     public class WavePage : TabPage {
