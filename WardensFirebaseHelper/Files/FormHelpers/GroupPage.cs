@@ -6,7 +6,16 @@ using System.Text;
 using System;
 
 using WardensFirebaseHelper.Structures.Levels;
-using WardensFirebaseHelper.Forms;
+using System.Security.RightsManagement;
+
+
+/*
+ *  Group page contains:
+ *      - GroupPanel
+ *      - List<EnemyPanel>
+ *      
+ *  EnemyPanel is built using EnemyPanelConfig
+ */
 
 namespace WardensFirebaseHelper.Files.FormHelpers {
     public struct EnemyPanelConfig {
@@ -130,11 +139,11 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
         }
     }
 
-    public class FormGroup : System.Windows.Forms.TabPage {
+    public class GroupPage : System.Windows.Forms.TabPage {
         public const int UNIT_CARD_SIZE = 40;
         Group group;
 
-        public FormGroup(string name,  Group group, IEnumerable<string> availableEnemies) {
+        public GroupPage(string name,  Group group, IEnumerable<string> availableEnemies) {
             this.group = group;
             this.BackColor = Color.White;
             this.Text = this.Name = name;
@@ -184,5 +193,36 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
 
         string GetEnemyClass(int index) => group.enemy_spawn[index].enemy_class;
         int GetSpawnAmount(int index) => group.enemy_spawn[index].quantity;
+    }
+
+    public class WavePage : TabPage {
+        public IEnumerable<GroupPage> GroupPages =>
+            from page in groupControl.TabPages.Cast<GroupPage>()
+            select page;
+
+        public int Index { get; private set; }
+        TabControl groupControl;
+
+        public WavePage(int index, Size size, IEnumerable<Group> groupCollection, IEnumerable<string> availableEnemies) {
+            Index = index;
+
+            this.Name = $"wavePage{Index}";
+            this.Text = $"Wave [{Index}]";
+
+            this.BackColor = Color.White;
+            this.AutoScroll = true;
+            this.Size = Size;
+
+            groupControl = new TabControl() {
+                Location = new Point(0, 0),
+                Size = size
+            };
+            this.Controls.Add(groupControl);
+
+            foreach (var group in groupCollection) {
+                GroupPage groupPage = new GroupPage($"Group {groupControl.TabPages.Count}", group, availableEnemies);
+                groupControl.TabPages.Add(groupPage);
+            }
+        }
     }
 }

@@ -10,11 +10,39 @@ using System.Collections;
 namespace WardensFirebaseHelper.Structures.Levels {
 
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
+    public class Root {
+        public Levels Levels { get; set; }
+    }
+
     public class Level {
         public List<Challenge> challenges { get; set; }
         public InfoData info_data { get; set; }
         public List<string> levels_unlock { get; set; }
         public List<string> region_unlock { get; set; }
+    }
+
+    public class Challenge {
+        public InfoData Info_data { get; set; }
+        public List<string> missions { get; set; }
+        public int victoryPoints { get; set; }
+        public List<Wave> waves { get; set; }
+    }
+
+    public class Wave {
+        public List<Group> groups { get; set; }
+        public int time_limit { get; set; }
+        public string wave_name { get; set; }
+    }
+
+    public class Group {
+        public List<EnemySpawn> enemy_spawn { get; set; }
+        public string spawn_location { get; set; }
+        public int spawn_time { get; set; }
+    }
+
+    public class EnemySpawn {
+        public string enemy_class { get; set; }
+        public int quantity { get; set; }
     }
 
     public class InfoData {
@@ -24,29 +52,7 @@ namespace WardensFirebaseHelper.Structures.Levels {
 
     }
 
-    public class EnemySpawn {
-        public string enemy_class { get; set; }
-        public int quantity { get; set; }
-    }
 
-    public class Group {
-        public List<EnemySpawn> enemy_spawn { get; set; }
-        public string spawn_location { get; set; }
-        public int spawn_time { get; set; }
-    }
-
-    public class Wave {
-        public List<Group> groups { get; set; }
-        public int time_limit { get; set; }
-        public string wave_name { get; set; }
-    }
-
-    public class Challenge {
-        public InfoData Info_data { get; set; }
-        public List<string> missions { get; set; }
-        public int victoryPoints { get; set; }
-        public List<Wave> waves { get; set; }
-    }
 
     public class Canopycircuit : Level { }
 
@@ -65,8 +71,4 @@ namespace WardensFirebaseHelper.Structures.Levels {
     public class Woodlandrun : Level { }
 
     public class Levels : Dictionary<string, Level> { }
-
-    public class Root {
-        public Levels Levels { get; set; }
-    }
 }

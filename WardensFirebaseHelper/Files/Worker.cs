@@ -26,6 +26,9 @@ namespace WardensFirebaseHelper.Files {
             Enemies = this.database[ENEMIES_KEY].ToObject<Enemies>();
         }
 
+        public IEnumerable<Group>  GetGroups(string levelName, int challegeIndex, int waveIndex) {
+            return Levels[levelName].challenges[challegeIndex].waves[waveIndex].groups;
+        }
         public IEnumerable<Wave> GetWavesOf(string levelName, int challengeIndex) {
             return from wave
                    in Levels[levelName].challenges[challengeIndex].waves
@@ -124,6 +127,13 @@ namespace WardensFirebaseHelper.Files {
 
         public Group GetGroup(string levelName, int challengeIndex, int waveIndex, int groupIndex) {
             return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[groupIndex];
+        }
+
+
+        public void Rebuild(string levelName, int challengeIndex, int waveIndex, IEnumerable<Group> groups) {
+            for (int groupIndex = 0; groupIndex < Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups.Count; groupIndex++) {
+                Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[groupIndex] = groups.ElementAt(groupIndex);
+            }
         }
     }
 }

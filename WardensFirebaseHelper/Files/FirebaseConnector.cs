@@ -107,6 +107,7 @@ namespace WardensFirebaseHelper.Files {
                 throw new System.InvalidOperationException("dbLocalNotFound");
             fb.uploadJson("", dbData);
         }
+
         public void loadFromLocal() {
             if (File.Exists(dbLocalPath))
                 dbData = JObject.Parse(File.ReadAllText(dbLocalPath));

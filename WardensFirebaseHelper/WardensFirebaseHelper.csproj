@@ -60,7 +60,7 @@
   <ItemGroup>
     <Compile Include="Files\Disposer.cs" />
     <Compile Include="Files\FirebaseConnector.cs" />
-    <Compile Include="Files\FormHelpers\FormGroup.cs">
+    <Compile Include="Files\FormHelpers\GroupPage.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Files\WardenStructures\Enemies.cs" />
