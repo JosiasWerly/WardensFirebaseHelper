@@ -121,5 +121,9 @@ namespace WardensFirebaseHelper.Files {
 
             return count;
         }
+
+        public Group GetGroup(string levelName, int challengeIndex, int waveIndex, int groupIndex) {
+            return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[groupIndex];
+        }
     }
 }

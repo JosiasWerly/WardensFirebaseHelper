@@ -12,9 +12,11 @@ using System.Linq;
 using System;
 
 using WardensFirebaseHelper.Files;
+using WardensFirebaseHelper.Files.FormHelpers;
+using System.Text.RegularExpressions;
 
 namespace WardensFirebaseHelper.Forms {
-    public struct UnitPanelConfiguration {
+    public struct PanelConfiguration {
         public int index;
         public Size size;
         public Point point;
@@ -36,6 +38,8 @@ namespace WardensFirebaseHelper.Forms {
 
     public partial class Editor : Form {
         public const int UNIT_CARD_SIZE = 40;
+        public const int TABS_WIDTH = 750;
+        public const int TABS_HEIGHT = 500;
 
         public int CurrentChallenge => challengesComboBox.Text != string.Empty ? int.Parse(challengesComboBox.Text) : -1;
         public int CurrentWaveIndex => waveTabs.SelectedIndex;
@@ -81,6 +85,7 @@ namespace WardensFirebaseHelper.Forms {
             if (CurrentChallenge >= 0) {
                 int waveCount = dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge);
                 for (int waveIndex = 0; waveIndex < waveCount; waveIndex++) {
+                    // Create a "Wave page" for each wave
                     waveTabs.TabPages.Add(new TabPage() {
                         BackColor = Color.White,
                         AutoScroll = true,
@@ -89,40 +94,26 @@ namespace WardensFirebaseHelper.Forms {
                         Text = $"Wave [{waveIndex}]",
                     });
 
-                    int enemyListIndex = 0;
+                    // Create a "Group tab" for each "Wave page"
+                    TabControl groupTab = new TabControl() {
+                        Location = new Point(0, 0),
+                        Size = new Size(TABS_WIDTH, TABS_HEIGHT),
+                    };
+
                     int groupCount = dbWorker.GetGroupCountOf(CurrentLevelName, CurrentChallenge, waveIndex);
                     for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
-
-                        int enemyCount = dbWorker.GetEnemyCountOf(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex);
-                        for (int enemyIndex = 0; enemyIndex < enemyCount; enemyIndex++) {
-                            Panel panel;
-                            UnitPanelStructures panelStructures;
-
-                            (panel, panelStructures) = ConstructUnitCard(new UnitPanelConfiguration() {
-                                index = enemyListIndex,
-                                color = enemyListIndex % 2 == 0 ? Color.Bisque : Color.OldLace,
-
-                                size = new Size(750, UNIT_CARD_SIZE),
-                                point = new Point(0, enemyListIndex * UNIT_CARD_SIZE),
-
-                                availableEnemies = dbWorker.GetEnemyNames(),
-
-                                spawnEnemyAt = dbWorker.GetSpawnLocationOf(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex),
-                                selectedEnemy = dbWorker.GetEnemyByIndex(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex, enemyIndex),
-                                selectedEnemyQuantity = dbWorker.GetSpawnQuantityOf(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex, enemyIndex),
-                                spawnTime = dbWorker.GetSpawnTimeOf(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex),
-                            });
-
-                            enemyListIndex++;
-                            waveTabs.TabPages[waveIndex].Controls.Add(panel);
-                        }
+                        // Create a "Group page" for each group
+                        FormGroup groupPage = new FormGroup($"Group {groupIndex}", dbWorker.GetGroup(CurrentLevelName, CurrentChallenge, waveIndex, groupIndex), dbWorker.GetEnemyNames());
+                        groupTab.TabPages.Add(groupPage);
                     }
+
+                    waveTabs.TabPages[waveIndex].Controls.Add(groupTab);
                 }
             }
         }
 
 
-        private (Panel, UnitPanelStructures) ConstructUnitCard(UnitPanelConfiguration panelConfiguration) {
+        private (Panel, UnitPanelStructures) ConstructUnitCard(PanelConfiguration panelConfiguration) {
             Panel panel = new Panel() {
                 BackColor = panelConfiguration.color,
 
