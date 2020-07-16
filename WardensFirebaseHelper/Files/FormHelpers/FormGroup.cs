@@ -9,7 +9,7 @@ using WardensFirebaseHelper.Structures.Levels;
 using WardensFirebaseHelper.Forms;
 
 namespace WardensFirebaseHelper.Files.FormHelpers {
-    public struct BasePanelConfig {
+    public struct EnemyPanelConfig {
         public int index;
         public Color color;
 
@@ -17,94 +17,68 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
         public Point location;
 
         public IEnumerable<string> availableEnemies;
-
-        public BasePanel Build() {
-            BasePanel root = new BasePanel();
-
-            root.BackColor = color;
-
-            root.Size = size;
-            root.Location = location;
-            root.Anchor = AnchorStyles.Top | AnchorStyles.Left;
-
-
-            Label spawnLabel = new Label() {
-                Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(3, root.Height / 3),
-                Size = new Size(80, root.Height / 2),
-                Text = $"[{index}] Spawn: ",
-            };
-            root.Controls.Add(spawnLabel);
-
-            ComboBox spawnCombobox = new ComboBox() {
-                Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(85, root.Height / 4),
-                Size = new Size(150, root.Height / 2),
-            };
-            root.Controls.Add(spawnCombobox);
-            root.SpawnCombobox = spawnCombobox;
-
-            foreach (string item in availableEnemies)
-                spawnCombobox.Items.Add(item);
-
-            return root;
-        }
-    }
-
-    public class BasePanel : Panel {
-        public ComboBox SpawnCombobox { get; set; }
-
-        public BasePanel() { }
     }
 
     public class EnemyPanel : Panel {
         public ComboBox EnemySpawnComboBox { get; private set; }
-        public TextBox EnemyAmountTextBox { get; private set; }
+        public TextBox EnemyAmountTextBox { get; private set; }        
 
-        BasePanel panel;
-        
+        public EnemyPanel(string initialSpawnClass, int initialAmount, EnemyPanelConfig config) {
+            // Panel setup
+            {
+                this.Size = config.size;
+                this.BackColor = config.color;
+                this.Location = config.location;
+                this.Anchor = AnchorStyles.Top | AnchorStyles.Left;
+            }
 
-        public EnemyPanel(string initialSpawnClass, int initialAmount, BasePanel panel) {
-            this.panel = panel;
+            // Enemy amount label and textBox
+            {
+                Label spawnLabel = new Label() {
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                    Location = new Point(3, this.Height / 3),
+                    Size = new Size(80, this.Height / 2),
+                    Text = $"[{config.index}] Spawn: ",
+                };
+                this.Controls.Add(spawnLabel);
 
-            ConstructElements(initialSpawnClass, initialAmount);
-        }
+                TextBox ammountTextBox = new TextBox() {
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                    Location = new Point(85, this.Height / 4),
+                    Size = new Size(30, this.Height / 2),
+                    Text = initialAmount.ToString(),
+                };
+                this.EnemyAmountTextBox = ammountTextBox;
+                this.Controls.Add(ammountTextBox);
+            }
 
-        void ConstructElements(string initialSpawnClass, int initialAmount) {
-            panel.SpawnCombobox.SelectedItem = initialSpawnClass;
-            this.EnemySpawnComboBox = panel.SpawnCombobox;
+            // Enemy class comboBox
+            {
+                ComboBox spawnCombobox = new ComboBox() {
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                    Location = new Point(120, this.Height / 4),
+                    Size = new Size(150, this.Height / 2),
+                };
 
-            TextBox ammountTextBox = new TextBox() {
-                Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(238, panel.Height / 4),
-                Size = new Size(30, panel.Height / 2),
-                Text = initialAmount.ToString(),
-            };
-            this.EnemyAmountTextBox = ammountTextBox;
-            panel.Controls.Add(ammountTextBox);
+                foreach (var enemy in config.availableEnemies)
+                    spawnCombobox.Items.Add(enemy);
 
-            Label timesLabel = new Label() {
-                Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(268, panel.Height / 3),
-                Size = new Size(40, panel.Height / 2),
-                Text = "Times,",
-            };
-            panel.Controls.Add(timesLabel);
+                this.Controls.Add(spawnCombobox);
+                this.EnemySpawnComboBox = spawnCombobox;
+                this.EnemySpawnComboBox.SelectedItem = initialSpawnClass;
+            }
 
-            Button deleteButton = new Button() {
-                Anchor = AnchorStyles.Top | AnchorStyles.Left,
-                Location = new Point(585, panel.Height / 3),
-                Size = new Size(60, panel.Height / 2),
-                BackColor = Color.WhiteSmoke,
-                Text = "Delete",
-            };
-            panel.Controls.Add(deleteButton);
-
-            this.Size = panel.Size;
-            this.Location = panel.Location;
-            panel.Location = new Point(0, 0);
-
-            this.Controls.Add(panel);
+            // Delete button
+            {
+                Button deleteButton = new Button() {
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                    Location = new Point(585, this.Height / 3),
+                    Size = new Size(60, this.Height / 2),
+                    BackColor = Color.WhiteSmoke,
+                    Text = "Delete",
+                };
+                this.Controls.Add(deleteButton);
+            }
         }
     }
 
@@ -156,7 +130,6 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
         }
     }
 
-
     public class FormGroup : System.Windows.Forms.TabPage {
         public const int UNIT_CARD_SIZE = 40;
         Group group;
@@ -168,7 +141,7 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
 
             for (int i = 0; i < group.enemy_spawn.Count; i++) {
                 GroupPanel groupPanel = new GroupPanel(group.spawn_location, group.spawn_time, new Size(750, UNIT_CARD_SIZE));
-                EnemyPanel enemyPanel = new EnemyPanel(GetEnemyClass(i), GetSpawnAmount(i), new BasePanelConfig {
+                EnemyPanel enemyPanel = new EnemyPanel(GetEnemyClass(i), GetSpawnAmount(i), new EnemyPanelConfig {
                     index = i,
                     color = i % 2 == 0 ? Color.Bisque : Color.OldLace,
 
@@ -176,7 +149,7 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
                     location = new Point(0, (i + 1) * UNIT_CARD_SIZE),
 
                     availableEnemies = availableEnemies,
-                }.Build());
+                });
 
                 // Method bindings
                 // Replicates spawn_texbox changes to group
