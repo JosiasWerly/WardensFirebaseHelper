@@ -49,6 +49,8 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
         public ComboBox EnemySpawnComboBox { get; private set; }
         public TextBox EnemyAmountTextBox { get; private set; }
 
+        public event Action<int, Group> OnDeleteButtonClicked;
+
         public EnemyPanel(int index, Group group, EnemyPanelConfig config) : base(index, group) {
             // Panel setup
             {
@@ -104,6 +106,7 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
                     Text = "Delete",
                 };
                 this.Controls.Add(deleteButton);
+                deleteButton.Click += HandleDeleteButtonClicked; ;
             }
 
             // Replicates enemy_spawn.enemy_class changes to group
@@ -111,6 +114,13 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
 
             // Replicates enemy_spawn.quantity changes to group
             EnemyAmountTextBox.TextChanged += HandleQuantityChanged;
+        }
+
+        void HandleDeleteButtonClicked(object sender, EventArgs e) {
+            Group.enemy_spawn.RemoveAt(Index);
+            if (this.Parent != null && (this.Parent is GroupPage)) {
+                (this.Parent as GroupPage).Reload();
+            }
         }
 
         void HandleQuantityChanged(object sender, EventArgs args) {
@@ -121,7 +131,7 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
 
         void HandleSpawnClassChanged(object sender, EventArgs args) {
             Group.enemy_spawn[Index].enemy_class = (sender as ComboBox).Text;
-        }
+        }        
     }
 
     public class GroupPanel : GroupReplicativePanel {
@@ -199,16 +209,24 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
     public class GroupPage : System.Windows.Forms.TabPage {
         public const int UNIT_CARD_SIZE = 40;
         public Group Group { get; private set; }
+        public IEnumerable<string> AvailableEnemies { get; set; }
 
         public GroupPage(string name,  Group group, IEnumerable<string> availableEnemies) {
             Group = group;
             this.BackColor = Color.White;
             this.Text = this.Name = name;
+            this.AvailableEnemies = availableEnemies;
 
-            GroupPanel groupPanel = new GroupPanel(group, new Size(750, UNIT_CARD_SIZE));
+            Reload();
+        }
+
+        public void Reload() {
+            this.Controls.Clear();
+
+            GroupPanel groupPanel = new GroupPanel(Group, new Size(750, UNIT_CARD_SIZE));
             this.Controls.Add(groupPanel);
 
-            for (int enemyIndex = 0; enemyIndex < group.enemy_spawn.Count; enemyIndex++) {
+            for (int enemyIndex = 0; enemyIndex < Group.enemy_spawn.Count; enemyIndex++) {
                 EnemyPanel enemyPanel = new EnemyPanel(enemyIndex, Group, new EnemyPanelConfig {
                     index = enemyIndex,
                     color = enemyIndex % 2 == 0 ? Color.Bisque : Color.OldLace,
@@ -216,7 +234,7 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
                     size = new Size(750, UNIT_CARD_SIZE),
                     location = new Point(0, (enemyIndex + 1) * UNIT_CARD_SIZE),
 
-                    availableEnemies = availableEnemies,
+                    availableEnemies = AvailableEnemies,
                 });
                 this.Controls.Add(enemyPanel);
             }
@@ -229,6 +247,8 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
             select page;
 
         public int Index { get; private set; }
+        public int CurrentGroupIndex => groupControl.SelectedIndex;
+        public GroupPage CurrentGroup => (GroupPage)groupControl.TabPages[CurrentGroupIndex];
         TabControl groupControl;
 
         public WavePage(int index, Size size, IEnumerable<Group> groupCollection, IEnumerable<string> availableEnemies) {

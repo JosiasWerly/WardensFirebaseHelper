@@ -14,6 +14,8 @@ using System;
 using WardensFirebaseHelper.Files;
 using WardensFirebaseHelper.Files.FormHelpers;
 using System.Text.RegularExpressions;
+using WardensFirebaseHelper.Structures.Levels;
+using Group = WardensFirebaseHelper.Structures.Levels.Group;
 
 namespace WardensFirebaseHelper.Forms {
     public struct UnitPanelStructures {
@@ -30,11 +32,17 @@ namespace WardensFirebaseHelper.Forms {
 
         public IEnumerable<WavePage> CurrentWavePagesCollection => from wavePage in waveTabs.TabPages.Cast<TabPage>() select wavePage as WavePage;
         public int CurrentChallenge => challengesComboBox.Text != string.Empty ? int.Parse(challengesComboBox.Text) : -1;
+
+        public GroupPage CurrentGroupPage => (waveTabs.TabPages[CurrentWaveIndex] as WavePage).CurrentGroup;
+        public int CurrentGroupIndex => (waveTabs.TabPages[CurrentWaveIndex] as WavePage).CurrentGroupIndex;
+
         public int CurrentWaveIndex => waveTabs.SelectedIndex;
         public string CurrentLevelName => mapComboBox.Text;
 
+        public bool IsSelectedChallengeValid => challengesComboBox.SelectedItem != null;
+        public bool IsSelectedMapValid => mapComboBox.SelectedItem != null;
 
-        Dictionary<string, Dictionary<int, List<WavePage>>> challengesByLevelName = new Dictionary<string, Dictionary<int, List<WavePage>>>();
+
         List<TabControl> groupTabList = new List<TabControl>();
         FirebaseInterface dataBaseInterface;
         Worker dbWorker;
@@ -50,62 +58,70 @@ namespace WardensFirebaseHelper.Forms {
             }
             
             InitializeComponent();
-            SetWavesTabVisibility(false);
+            SetVisibilityForHideableContent(false);
+
+            waveTabs.Selected += HandleWaveSelection;
 
             foreach (var mapName in dbWorker.GetLevelNames())
                 mapComboBox.Items.Add(mapName);
         }
+
         private void mapComboBox_SelectedIndexChanged(object sender, EventArgs e) {
-            challengesComboBox.Text = string.Empty;
-            challengesComboBox.Items.Clear();
+            if(mapComboBox.SelectedItem != null) {
+                challengesComboBox.Text = string.Empty;
+                challengesComboBox.Items.Clear();
 
-            if (!challengesByLevelName.ContainsKey(CurrentLevelName)) {
-                challengesByLevelName.Add(CurrentLevelName, new Dictionary<int, List<WavePage>>());
+                for (int i = 0; i < dbWorker.GetChallengeCountOf(CurrentLevelName); i++) {
+                    challengesComboBox.Items.Add(i);
+                }
             }
-
-            for (int i = 0; i < dbWorker.GetChallengeCountOf(CurrentLevelName); i++) {
-                challengesComboBox.Items.Add(i);
-            }
-
-            SetWavesTabVisibility(IsSelectionValid());
         }
 
         private void challengesComboBox_SelectedIndexChanged(object sender, EventArgs e) {
-            //SaveToLocal();
-            waveTabs.TabPages.Clear();
-            SetWavesTabVisibility(IsSelectionValid());
+            if(challengesComboBox.SelectedItem != null && mapComboBox.SelectedItem != null) {
+                waveTabs.TabPages.Clear();
 
-            if (!challengesByLevelName[CurrentLevelName].ContainsKey(CurrentChallenge)) {
-                challengesByLevelName[CurrentLevelName].Add(CurrentChallenge, new List<WavePage>());
-            }
-
-            if (CurrentChallenge >= 0) {
+                SetVisibilityForHideableContent(true);
+                
                 int waveCount = dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge);
                 for (int waveIndex = 0; waveIndex < waveCount; waveIndex++) {
                     WavePage wavePage = new WavePage(waveIndex, new Size(TABS_WIDTH, TABS_HEIGHT), dbWorker.GetGroups(CurrentLevelName, CurrentChallenge, waveIndex), dbWorker.GetEnemyNames());
-                    challengesByLevelName[CurrentLevelName][CurrentChallenge].Add(wavePage);
                     waveTabs.TabPages.Add(wavePage);
                 }
             }
         }
 
+        private void HandleWaveSelection(object sender, EventArgs e) {
+            Console.WriteLine("Aaaua");
+        }
 
-        private void SetWavesTabVisibility(bool visible) {
+        private void SetVisibilityForHideableContent(bool visible) {
             splitContainer.Visible = visible;
+            c_buttonsContainer.Visible = visible;
         }
 
-        private bool IsSelectionValid() {
-            return (mapComboBox.SelectedIndex >= 0 && mapComboBox.SelectedIndex <= mapComboBox.Items.Count)
-                    && (challengesComboBox.SelectedIndex >= 0 && challengesComboBox.SelectedIndex < challengesComboBox.Items.Count);
-        }
-        
-        private void SaveToLocal() {
+        private void b_Save_Click(object sender, EventArgs e) {
             dbWorker.ApplyLevelChanges();
             dataBaseInterface.saveToLocal();
         }
 
-        private void b_Save_Click(object sender, EventArgs e) {
-            SaveToLocal();
+        private void b_Reload_Click(object sender, EventArgs e) {
+            dataBaseInterface.loadFromLocal();
+            dbWorker = new Worker(dataBaseInterface.dbData);
+
+            challengesComboBox.SelectedItem = null;
+            mapComboBox.SelectedItem = null;
+
+            SetVisibilityForHideableContent(false);
+        }
+
+        private void b_CreateEnemy_Click(object sender, EventArgs e) {
+            if(IsSelectedMapValid && IsSelectedChallengeValid) {
+                EnemySpawn enemySpawn = new EnemySpawn();
+
+                CurrentGroupPage.Group.enemy_spawn.Add(enemySpawn);
+                CurrentGroupPage.Reload();
+            }
         }
     }
 }

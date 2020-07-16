@@ -31,7 +31,7 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.mapComboBox = new System.Windows.Forms.ComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.button4 = new System.Windows.Forms.Button();
+            this.b_Reload = new System.Windows.Forms.Button();
             this.b_Save = new System.Windows.Forms.Button();
             this.challengesComboBox = new System.Windows.Forms.ComboBox();
             this.mapLabel = new System.Windows.Forms.Label();
@@ -48,8 +48,11 @@
             this.textBox4 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.b_Upload = new System.Windows.Forms.Button();
+            this.b_CreateEnemy = new System.Windows.Forms.Button();
+            this.c_buttonsContainer = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
+            this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.waveTabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -57,7 +60,12 @@
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
             this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.c_buttonsContainer)).BeginInit();
+            this.c_buttonsContainer.Panel1.SuspendLayout();
+            this.c_buttonsContainer.Panel2.SuspendLayout();
+            this.c_buttonsContainer.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
+            this.flowLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // waveTabs
@@ -69,7 +77,7 @@
             this.waveTabs.Location = new System.Drawing.Point(3, 3);
             this.waveTabs.Name = "waveTabs";
             this.waveTabs.SelectedIndex = 0;
-            this.waveTabs.Size = new System.Drawing.Size(676, 397);
+            this.waveTabs.Size = new System.Drawing.Size(681, 432);
             this.waveTabs.TabIndex = 0;
             // 
             // tabPage1
@@ -77,7 +85,7 @@
             this.tabPage1.Controls.Add(this.tabControl1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(668, 371);
+            this.tabPage1.Size = new System.Drawing.Size(673, 406);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -89,7 +97,7 @@
             this.tabControl1.Location = new System.Drawing.Point(3, 3);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(664, 365);
+            this.tabControl1.Size = new System.Drawing.Size(628, 365);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage2
@@ -97,7 +105,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(656, 339);
+            this.tabPage2.Size = new System.Drawing.Size(620, 339);
             this.tabPage2.TabIndex = 0;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -107,7 +115,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(656, 339);
+            this.tabPage3.Size = new System.Drawing.Size(620, 339);
             this.tabPage3.TabIndex = 1;
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -131,24 +139,25 @@
             this.panel3.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.panel3.Location = new System.Drawing.Point(3, 25);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(249, 375);
+            this.panel3.Size = new System.Drawing.Size(300, 406);
             this.panel3.TabIndex = 4;
             // 
-            // button4
+            // b_Reload
             // 
-            this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.button4.Location = new System.Drawing.Point(93, 3);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(84, 23);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "Load";
-            this.button4.UseVisualStyleBackColor = false;
+            this.b_Reload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.b_Reload.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.b_Reload.Location = new System.Drawing.Point(36, 3);
+            this.b_Reload.Name = "b_Reload";
+            this.b_Reload.Size = new System.Drawing.Size(84, 23);
+            this.b_Reload.TabIndex = 4;
+            this.b_Reload.Text = "Reload";
+            this.b_Reload.UseVisualStyleBackColor = false;
+            this.b_Reload.Click += new System.EventHandler(this.b_Reload_Click);
             // 
             // b_Save
             // 
             this.b_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_Save.Location = new System.Drawing.Point(3, 3);
+            this.b_Save.Location = new System.Drawing.Point(126, 3);
             this.b_Save.Name = "b_Save";
             this.b_Save.Size = new System.Drawing.Size(84, 23);
             this.b_Save.TabIndex = 5;
@@ -287,41 +296,82 @@
             // splitContainer.Panel1
             // 
             this.splitContainer.Panel1.Controls.Add(this.waveTabs);
+            this.splitContainer.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             // 
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.panel3);
-            this.splitContainer.Size = new System.Drawing.Size(938, 403);
-            this.splitContainer.SplitterDistance = 682;
+            this.splitContainer.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.splitContainer.Size = new System.Drawing.Size(997, 438);
+            this.splitContainer.SplitterDistance = 687;
             this.splitContainer.TabIndex = 11;
+            // 
+            // b_Upload
+            // 
+            this.b_Upload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.b_Upload.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.b_Upload.Location = new System.Drawing.Point(216, 3);
+            this.b_Upload.Name = "b_Upload";
+            this.b_Upload.Size = new System.Drawing.Size(84, 23);
+            this.b_Upload.TabIndex = 13;
+            this.b_Upload.Text = "Upload";
+            this.b_Upload.UseVisualStyleBackColor = false;
+            // 
+            // b_CreateEnemy
+            // 
+            this.b_CreateEnemy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.b_CreateEnemy.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.b_CreateEnemy.Location = new System.Drawing.Point(3, 3);
+            this.b_CreateEnemy.Name = "b_CreateEnemy";
+            this.b_CreateEnemy.Size = new System.Drawing.Size(84, 23);
+            this.b_CreateEnemy.TabIndex = 13;
+            this.b_CreateEnemy.Text = "Create enemy element";
+            this.b_CreateEnemy.UseVisualStyleBackColor = false;
+            this.b_CreateEnemy.Click += new System.EventHandler(this.b_CreateEnemy_Click);
+            // 
+            // c_buttonsContainer
+            // 
+            this.c_buttonsContainer.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.c_buttonsContainer.Location = new System.Drawing.Point(12, 522);
+            this.c_buttonsContainer.Name = "c_buttonsContainer";
+            // 
+            // c_buttonsContainer.Panel1
+            // 
+            this.c_buttonsContainer.Panel1.Controls.Add(this.flowLayoutPanel2);
+            // 
+            // c_buttonsContainer.Panel2
+            // 
+            this.c_buttonsContainer.Panel2.Controls.Add(this.flowLayoutPanel1);
+            this.c_buttonsContainer.Size = new System.Drawing.Size(997, 29);
+            this.c_buttonsContainer.SplitterDistance = 687;
+            this.c_buttonsContainer.TabIndex = 13;
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.Controls.Add(this.b_Upload);
             this.flowLayoutPanel1.Controls.Add(this.b_Save);
-            this.flowLayoutPanel1.Controls.Add(this.button4);
-            this.flowLayoutPanel1.Controls.Add(this.button1);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(443, 12);
+            this.flowLayoutPanel1.Controls.Add(this.b_Reload);
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(507, 53);
-            this.flowLayoutPanel1.TabIndex = 12;
+            this.flowLayoutPanel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(303, 43);
+            this.flowLayoutPanel1.TabIndex = 14;
             // 
-            // button1
+            // flowLayoutPanel2
             // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.button1.Location = new System.Drawing.Point(183, 3);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(84, 23);
-            this.button1.TabIndex = 13;
-            this.button1.Text = "Load";
-            this.button1.UseVisualStyleBackColor = false;
+            this.flowLayoutPanel2.Controls.Add(this.b_CreateEnemy);
+            this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel2.Name = "flowLayoutPanel2";
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(688, 43);
+            this.flowLayoutPanel2.TabIndex = 14;
             // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(962, 492);
-            this.Controls.Add(this.flowLayoutPanel1);
+            this.ClientSize = new System.Drawing.Size(1021, 565);
+            this.Controls.Add(this.c_buttonsContainer);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.challengeLabel);
             this.Controls.Add(this.mapLabel);
@@ -338,7 +388,12 @@
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
             this.splitContainer.ResumeLayout(false);
+            this.c_buttonsContainer.Panel1.ResumeLayout(false);
+            this.c_buttonsContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.c_buttonsContainer)).EndInit();
+            this.c_buttonsContainer.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
+            this.flowLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -348,7 +403,7 @@
         private System.Windows.Forms.TabControl waveTabs;
         private System.Windows.Forms.ComboBox mapComboBox;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button b_Reload;
         private System.Windows.Forms.Button b_Save;
         private System.Windows.Forms.ComboBox challengesComboBox;
         private System.Windows.Forms.Label mapLabel;
@@ -369,7 +424,10 @@
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Button b_Upload;
+        private System.Windows.Forms.Button b_CreateEnemy;
+        private System.Windows.Forms.SplitContainer c_buttonsContainer;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Button button1;
     }
 }
