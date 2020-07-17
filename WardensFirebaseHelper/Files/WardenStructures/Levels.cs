@@ -17,6 +17,16 @@ namespace WardensFirebaseHelper.Structures.Levels {
         public InfoData info_data { get; set; }
         public List<string> levels_unlock { get; set; }
         public List<string> region_unlock { get; set; }
+
+        public Level () { }
+        public Level(bool isNew) {
+            if (challenges == null) {
+                challenges = new List<Challenge>();
+                for (int i = 0; i < 4; i++) {
+                    challenges.Add(new Challenge());
+                }
+            }
+        }
     }
 
     public class Challenge {
@@ -24,6 +34,10 @@ namespace WardensFirebaseHelper.Structures.Levels {
         public List<string> missions { get; set; }
         public int victoryPoints { get; set; }
         public List<Wave> waves { get; set; }
+
+        public Challenge() {
+            waves = new List<Wave>();
+        }
     }
 
     public class Wave {

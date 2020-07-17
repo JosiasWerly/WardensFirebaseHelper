@@ -31,6 +31,8 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.mapComboBox = new System.Windows.Forms.ComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.tb_mapName = new System.Windows.Forms.TextBox();
+            this.l_mapName = new System.Windows.Forms.Label();
             this.b_Reload = new System.Windows.Forms.Button();
             this.b_Save = new System.Windows.Forms.Button();
             this.challengesComboBox = new System.Windows.Forms.ComboBox();
@@ -54,6 +56,7 @@
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.b_CreateGroup = new System.Windows.Forms.Button();
             this.b_CreateWave = new System.Windows.Forms.Button();
+            this.b_CreateMap = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.b_Import = new System.Windows.Forms.Button();
@@ -62,6 +65,7 @@
             this.waveTabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -143,10 +147,29 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel3.BackColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.panel3.Controls.Add(this.tb_mapName);
+            this.panel3.Controls.Add(this.l_mapName);
             this.panel3.Location = new System.Drawing.Point(3, 25);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(300, 406);
             this.panel3.TabIndex = 4;
+            // 
+            // tb_mapName
+            // 
+            this.tb_mapName.Location = new System.Drawing.Point(69, 8);
+            this.tb_mapName.Name = "tb_mapName";
+            this.tb_mapName.Size = new System.Drawing.Size(181, 20);
+            this.tb_mapName.TabIndex = 1;
+            this.tb_mapName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.tb_mapName_KeyUp);
+            // 
+            // l_mapName
+            // 
+            this.l_mapName.AutoSize = true;
+            this.l_mapName.Location = new System.Drawing.Point(3, 11);
+            this.l_mapName.Name = "l_mapName";
+            this.l_mapName.Size = new System.Drawing.Size(60, 13);
+            this.l_mapName.TabIndex = 0;
+            this.l_mapName.Text = "Map name:";
             // 
             // b_Reload
             // 
@@ -358,6 +381,7 @@
             this.flowLayoutPanel2.Controls.Add(this.b_CreateEnemy);
             this.flowLayoutPanel2.Controls.Add(this.b_CreateGroup);
             this.flowLayoutPanel2.Controls.Add(this.b_CreateWave);
+            this.flowLayoutPanel2.Controls.Add(this.b_CreateMap);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(688, 43);
@@ -387,6 +411,16 @@
             this.b_CreateWave.UseVisualStyleBackColor = false;
             this.b_CreateWave.Click += new System.EventHandler(this.b_CreateWave_Click);
             // 
+            // b_CreateMap
+            // 
+            this.b_CreateMap.Location = new System.Drawing.Point(351, 3);
+            this.b_CreateMap.Name = "b_CreateMap";
+            this.b_CreateMap.Size = new System.Drawing.Size(100, 23);
+            this.b_CreateMap.TabIndex = 16;
+            this.b_CreateMap.Text = "Create new map";
+            this.b_CreateMap.UseVisualStyleBackColor = true;
+            this.b_CreateMap.Click += new System.EventHandler(this.b_CreateMap_Click);
+            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Controls.Add(this.b_Upload);
@@ -405,6 +439,7 @@
             // 
             // b_Import
             // 
+            this.b_Import.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.b_Import.Location = new System.Drawing.Point(922, 10);
             this.b_Import.Name = "b_Import";
             this.b_Import.Size = new System.Drawing.Size(75, 23);
@@ -415,6 +450,7 @@
             // 
             // b_Export
             // 
+            this.b_Export.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.b_Export.Location = new System.Drawing.Point(922, 39);
             this.b_Export.Name = "b_Export";
             this.b_Export.Size = new System.Drawing.Size(75, 23);
@@ -453,6 +489,8 @@
             this.waveTabs.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
@@ -504,5 +542,8 @@
         private System.Windows.Forms.Button b_Import;
         private System.Windows.Forms.Button b_Export;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.Button b_CreateMap;
+        private System.Windows.Forms.Label l_mapName;
+        private System.Windows.Forms.TextBox tb_mapName;
     }
 }

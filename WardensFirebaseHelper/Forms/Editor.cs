@@ -41,6 +41,8 @@ namespace WardensFirebaseHelper.Forms {
         public bool SelectedChallengeIsValid => challengesComboBox.SelectedItem != null;
         public bool SelectedMapIsValid => mapComboBox.SelectedItem != null;
 
+        public bool SelectedWaveIsValid => waveTabs.SelectedTab != null;
+
 
         FirebaseInterface dataBaseInterface;
         Worker dbWorker;
@@ -58,10 +60,9 @@ namespace WardensFirebaseHelper.Forms {
             InitializeComponent();
             SetVisibilityForHideableContent(false);
 
-            foreach (var mapName in dbWorker.GetLevelNames())
-                mapComboBox.Items.Add(mapName);
-
             WardensEnviroment.AvailableEnemies = dbWorker.GetEnemyNames();
+
+            ResetOwnedMaps();
         }
 
         private void SetVisibilityForHideableContent(bool visible) {
@@ -121,6 +122,11 @@ namespace WardensFirebaseHelper.Forms {
             return false;
         }
 
+        private void ResetOwnedMaps() {
+            foreach (var mapName in dbWorker.GetLevelNames())
+                mapComboBox.Items.Add(mapName);
+        }
+
 
         private void Editor_FormClosing(object sender, FormClosingEventArgs e) {
             // Display a MsgBox asking the user to save changes or abort.
@@ -138,6 +144,7 @@ namespace WardensFirebaseHelper.Forms {
                     challengesComboBox.Items.Add(i);
                 }
 
+                tb_mapName.Text = CurrentLevelName;
                 challengesComboBox.Text = string.Empty;
                 challengesComboBox.SelectedItem = null;
                 SetVisibilityForHideableContent(false);
@@ -186,14 +193,14 @@ namespace WardensFirebaseHelper.Forms {
         }
 
         private void b_CreateGroup_Click(object sender, EventArgs e) {
-            if(SelectedMapIsValid && SelectedChallengeIsValid) {
-
-                Task.Run(() => {
-                    var dialogBox = MessageBox.Show("Wait while the page is reloading...", "Warning", MessageBoxButtons.OK);
-                });
-
+            if(SelectedMapIsValid && SelectedChallengeIsValid && SelectedWaveIsValid) {
                 CurrentWavePage.Wave.groups.Add(new Group());
                 CurrentWavePage.Reload();
+            }
+            else {
+                Task.Run(() => {
+                    MessageBox.Show("Please. You must create a wave firts.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                });
             }
         }
 
@@ -205,6 +212,19 @@ namespace WardensFirebaseHelper.Forms {
                 ReloadWavesTab();
                 waveTabs.SelectedIndex = waveTabs.TabCount - 1;
             }
+        }
+
+        private void b_CreateMap_Click(object sender, EventArgs e) {
+            dbWorker.CreateLevel();
+
+            ResetOwnedMaps();
+
+            mapComboBox.SelectedIndex = mapComboBox.Items.Count - 1;
+            mapComboBox.Select();
+            mapComboBox.Focus();
+
+            challengesComboBox.SelectedIndex = 0;
+            challengesComboBox.Select();
         }
 
         private void b_Upload_Click(object sender, EventArgs e) {
@@ -250,6 +270,22 @@ namespace WardensFirebaseHelper.Forms {
                 System.IO.File.WriteAllText(saveFileDialog1.FileName, JsonConvert.SerializeObject(dbWorker.DataBase));
 
                 MessageBox.Show("Database file exported successfully!", "Export operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e) {
+            if (SelectedMapIsValid) {
+                dbWorker.ReplaceLevel(CurrentLevelName, (sender as TextBox).Text);
+                mapComboBox.Text = (sender as TextBox).Text;
+
+                ResetOwnedMaps();
+            }
+        }
+
+        private void tb_mapName_KeyUp(object sender, KeyEventArgs e) {
+            if (e.KeyData == Keys.Enter) {
+                dbWorker.ReplaceLevel(CurrentLevelName, (sender as TextBox).Text);
+                mapComboBox.Text = (sender as TextBox).Text;
             }
         }
     }

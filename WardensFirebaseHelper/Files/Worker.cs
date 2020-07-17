@@ -140,9 +140,33 @@ namespace WardensFirebaseHelper.Files {
         public void ApplyLevelChanges() => database[LEVELS_KEY] = JToken.FromObject(Levels);
         public void ApplyEnemyChanges() => database[ENEMIES_KEY] = JToken.FromObject(Enemies);
 
-        void foo() {
-            var tok = database[LEVELS_KEY];
-            //tok.a
+
+        public Level CreateLevel() {
+            string mapName = "new level";
+            if (Levels.ContainsKey(mapName)) {
+                int tries = 0;
+                mapName += $" {tries}";
+
+                while (Levels.ContainsKey(mapName)) {
+                    tries++;
+                    var pieces = mapName.Split();
+                    mapName = $"{pieces[0]} {pieces[1]} {tries}";
+                }
+            }
+
+            Levels.Add(mapName, new Level(true));
+            return Levels[mapName];
+        }
+
+        public void ReplaceLevel(string name, string newName) {
+            if (!string.IsNullOrEmpty(newName) && newName != name) {
+                if (Levels.ContainsKey(name)) {
+                    Level level = Levels[name];
+                    Levels.Remove(name);
+
+                    Levels.Add(newName, level);
+                }
+            }
         }
     }
 }
