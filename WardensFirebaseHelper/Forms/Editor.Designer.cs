@@ -53,8 +53,12 @@
             this.c_buttonsContainer = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.b_CreateGroup = new System.Windows.Forms.Button();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.b_CreateWave = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.b_Import = new System.Windows.Forms.Button();
+            this.b_Export = new System.Windows.Forms.Button();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.waveTabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -148,7 +152,7 @@
             // 
             this.b_Reload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.b_Reload.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.b_Reload.Location = new System.Drawing.Point(36, 3);
+            this.b_Reload.Location = new System.Drawing.Point(123, 3);
             this.b_Reload.Name = "b_Reload";
             this.b_Reload.Size = new System.Drawing.Size(84, 23);
             this.b_Reload.TabIndex = 4;
@@ -159,7 +163,7 @@
             // b_Save
             // 
             this.b_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_Save.Location = new System.Drawing.Point(126, 3);
+            this.b_Save.Location = new System.Drawing.Point(213, 3);
             this.b_Save.Name = "b_Save";
             this.b_Save.Size = new System.Drawing.Size(84, 23);
             this.b_Save.TabIndex = 5;
@@ -312,7 +316,7 @@
             // 
             this.b_Upload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.b_Upload.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.b_Upload.Location = new System.Drawing.Point(216, 3);
+            this.b_Upload.Location = new System.Drawing.Point(303, 3);
             this.b_Upload.Name = "b_Upload";
             this.b_Upload.Size = new System.Drawing.Size(84, 23);
             this.b_Upload.TabIndex = 13;
@@ -346,7 +350,7 @@
             // 
             this.c_buttonsContainer.Panel2.Controls.Add(this.flowLayoutPanel1);
             this.c_buttonsContainer.Size = new System.Drawing.Size(997, 29);
-            this.c_buttonsContainer.SplitterDistance = 687;
+            this.c_buttonsContainer.SplitterDistance = 600;
             this.c_buttonsContainer.TabIndex = 13;
             // 
             // flowLayoutPanel2
@@ -371,18 +375,6 @@
             this.b_CreateGroup.UseVisualStyleBackColor = false;
             this.b_CreateGroup.Click += new System.EventHandler(this.b_CreateGroup_Click);
             // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Controls.Add(this.b_Upload);
-            this.flowLayoutPanel1.Controls.Add(this.b_Save);
-            this.flowLayoutPanel1.Controls.Add(this.b_Reload);
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(303, 43);
-            this.flowLayoutPanel1.TabIndex = 14;
-            // 
             // b_CreateWave
             // 
             this.b_CreateWave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -395,11 +387,58 @@
             this.b_CreateWave.UseVisualStyleBackColor = false;
             this.b_CreateWave.Click += new System.EventHandler(this.b_CreateWave_Click);
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.b_Upload);
+            this.flowLayoutPanel1.Controls.Add(this.b_Save);
+            this.flowLayoutPanel1.Controls.Add(this.b_Reload);
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(390, 31);
+            this.flowLayoutPanel1.TabIndex = 14;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // b_Import
+            // 
+            this.b_Import.Location = new System.Drawing.Point(922, 10);
+            this.b_Import.Name = "b_Import";
+            this.b_Import.Size = new System.Drawing.Size(75, 23);
+            this.b_Import.TabIndex = 14;
+            this.b_Import.Text = "Import";
+            this.b_Import.UseVisualStyleBackColor = true;
+            this.b_Import.Click += new System.EventHandler(this.b_Import_Click);
+            // 
+            // b_Export
+            // 
+            this.b_Export.Location = new System.Drawing.Point(922, 39);
+            this.b_Export.Name = "b_Export";
+            this.b_Export.Size = new System.Drawing.Size(75, 23);
+            this.b_Export.TabIndex = 15;
+            this.b_Export.Text = "Export";
+            this.b_Export.UseVisualStyleBackColor = true;
+            this.b_Export.Click += new System.EventHandler(this.b_Export_Click);
+            // 
+            // saveFileDialog1
+            // 
+            this.saveFileDialog1.CheckFileExists = true;
+            this.saveFileDialog1.DefaultExt = "json";
+            this.saveFileDialog1.Filter = "Json files (*.json)|*.json";
+            this.saveFileDialog1.RestoreDirectory = true;
+            this.saveFileDialog1.Title = "Export Database file";
+            this.saveFileDialog1.ValidateNames = false;
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1021, 565);
+            this.Controls.Add(this.b_Export);
+            this.Controls.Add(this.b_Import);
             this.Controls.Add(this.c_buttonsContainer);
             this.Controls.Add(this.splitContainer);
             this.Controls.Add(this.challengeLabel);
@@ -461,5 +500,9 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button b_CreateGroup;
         private System.Windows.Forms.Button b_CreateWave;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button b_Import;
+        private System.Windows.Forms.Button b_Export;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }

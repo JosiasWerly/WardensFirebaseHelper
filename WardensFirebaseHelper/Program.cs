@@ -4,7 +4,7 @@ using WardensFirebaseHelper.Forms;
 namespace WardensFirebaseHelper {
    
     static class Program {
-        //[STAThread]
+        [System.STAThread]
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

@@ -19,26 +19,29 @@ using Group = WardensFirebaseHelper.Structures.Levels.Group;
 
 namespace WardensFirebaseHelper.Forms {
     public partial class Editor : Form {
-        public const int UNIT_CARD_SIZE = 40;
         public const int TABS_WIDTH = 750;
         public const int TABS_HEIGHT = 500;
 
-        public IEnumerable<WavePage> CurrentWavePagesCollection => from wavePage in waveTabs.TabPages.Cast<TabPage>() select wavePage as WavePage;
         public int CurrentChallenge => challengesComboBox.Text != string.Empty ? int.Parse(challengesComboBox.Text) : -1;
 
-        public GroupPage CurrentGroupPage => (waveTabs.TabPages[CurrentWaveIndex] as WavePage).CurrentGroup;
+        public GroupPage CurrentGroupPage => CurrentWavePage != null ? CurrentWavePage.CurrentGroup : null;
         public int CurrentGroupIndex => (waveTabs.TabPages[CurrentWaveIndex] as WavePage).CurrentGroupIndex;
 
-        public WavePage CurrentWavePage => (WavePage)waveTabs.TabPages[CurrentWaveIndex];
-
         public int CurrentWaveIndex => waveTabs.SelectedIndex;
+        public WavePage CurrentWavePage {
+            get {
+                return (CurrentWaveIndex >= 0 && CurrentWaveIndex <= waveTabs.TabPages.Count) ?
+                    waveTabs.TabPages[CurrentWaveIndex] as WavePage :
+                    null;
+            }
+        }
+
         public string CurrentLevelName => mapComboBox.Text;
 
         public bool SelectedChallengeIsValid => challengesComboBox.SelectedItem != null;
         public bool SelectedMapIsValid => mapComboBox.SelectedItem != null;
 
 
-        List<TabControl> groupTabList = new List<TabControl>();
         FirebaseInterface dataBaseInterface;
         Worker dbWorker;
 
@@ -66,15 +69,6 @@ namespace WardensFirebaseHelper.Forms {
             c_buttonsContainer.Visible = visible;
         }
 
-        private void ReloadWavesTab() {
-            waveTabs.TabPages.Clear();
-
-            int waveCount = dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge);
-            for (int waveIndex = 0; waveIndex < waveCount; waveIndex++) {
-                WavePage wavePage = new WavePage(waveIndex, new Size(TABS_WIDTH, TABS_HEIGHT), dbWorker.GetWave(CurrentLevelName, CurrentChallenge, waveIndex));
-                waveTabs.TabPages.Add(wavePage);
-            }
-        }
 
         private bool SaveData() {
             try {
@@ -86,6 +80,7 @@ namespace WardensFirebaseHelper.Forms {
                 return false;
             }
         }
+
         private bool UploadData() {
             try {
                 dbWorker.ApplyLevelChanges();
@@ -95,6 +90,35 @@ namespace WardensFirebaseHelper.Forms {
             catch (Exception e) {
                 return false;
             }
+        }
+
+        private void ReloadWavesTab() {
+            waveTabs.TabPages.Clear();
+
+            int waveCount = dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge);
+            for (int waveIndex = 0; waveIndex < waveCount; waveIndex++) {
+                WavePage wavePage = new WavePage(waveIndex, new Size(TABS_WIDTH, TABS_HEIGHT), dbWorker.GetWave(CurrentLevelName, CurrentChallenge, waveIndex));
+                waveTabs.TabPages.Add(wavePage);
+            }
+        }
+
+        private void SimpleReloadAction() {
+            if (CurrentWavePage != null) {
+                CurrentWavePage.GroupControl.SelectedIndex = 0;
+                waveTabs.SelectedIndex = 0;
+            }
+
+            mapComboBox.Text = challengesComboBox.Text= string.Empty;
+            SetVisibilityForHideableContent(false);
+        }
+
+        private bool HardReload() {
+            if(CurrentWavePage != null) {
+                ReloadWavesTab();
+                return true;
+            }
+
+            return false;
         }
 
 
@@ -142,12 +166,7 @@ namespace WardensFirebaseHelper.Forms {
             dataBaseInterface.loadFromLocal();
             dbWorker = new Worker(dataBaseInterface.dbData);
 
-            mapComboBox.SelectedIndex = 0;
-            challengesComboBox.SelectedIndex = 0;
-            waveTabs.SelectedIndex = 0;
-            CurrentWavePage.GroupControl.SelectedIndex = 0;
-
-            //SetVisibilityForHideableContent(false);
+            SimpleReloadAction();
         }
 
         private void b_CreateEnemy_Click(object sender, EventArgs e) {
@@ -194,6 +213,43 @@ namespace WardensFirebaseHelper.Forms {
             }
             else {
                 MessageBox.Show("Upload failed!", "Upload", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void b_Import_Click(object sender, EventArgs e) {
+            openFileDialog1 = new OpenFileDialog() {
+                RestoreDirectory = true,
+
+                Filter = "Json files (*.json)|*.json",
+                FilterIndex = 1,
+
+                Title = "Browse Database file",
+                DefaultExt = "json",
+            };
+
+            var result = openFileDialog1.ShowDialog();
+            if (result.Equals(DialogResult.OK)) {
+                dataBaseInterface = new FirebaseInterface(openFileDialog1.FileName);
+                dbWorker = new Worker(dataBaseInterface.dbData);
+
+                MessageBox.Show("Database file imported successfully!", "Import operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                if (!HardReload()) {
+                    SimpleReloadAction();
+                }
+            }
+        }
+
+        private void b_Export_Click(object sender, EventArgs e) {
+
+            var result = saveFileDialog1.ShowDialog();
+            if (result.Equals(DialogResult.OK)) {
+                dbWorker.ApplyLevelChanges();
+                dbWorker.ApplyEnemyChanges();
+
+                System.IO.File.WriteAllText(saveFileDialog1.FileName, JsonConvert.SerializeObject(dbWorker.DataBase));
+
+                MessageBox.Show("Database file exported successfully!", "Export operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }
