@@ -53,6 +53,7 @@
             this.c_buttonsContainer = new System.Windows.Forms.SplitContainer();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
+            this.b_CreateGroup = new System.Windows.Forms.Button();
             this.waveTabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -323,9 +324,9 @@
             this.b_CreateEnemy.BackColor = System.Drawing.SystemColors.ControlLight;
             this.b_CreateEnemy.Location = new System.Drawing.Point(3, 3);
             this.b_CreateEnemy.Name = "b_CreateEnemy";
-            this.b_CreateEnemy.Size = new System.Drawing.Size(84, 23);
+            this.b_CreateEnemy.Size = new System.Drawing.Size(110, 23);
             this.b_CreateEnemy.TabIndex = 13;
-            this.b_CreateEnemy.Text = "Create enemy element";
+            this.b_CreateEnemy.Text = "Create enemy field";
             this.b_CreateEnemy.UseVisualStyleBackColor = false;
             this.b_CreateEnemy.Click += new System.EventHandler(this.b_CreateEnemy_Click);
             // 
@@ -361,10 +362,23 @@
             // flowLayoutPanel2
             // 
             this.flowLayoutPanel2.Controls.Add(this.b_CreateEnemy);
+            this.flowLayoutPanel2.Controls.Add(this.b_CreateGroup);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(688, 43);
             this.flowLayoutPanel2.TabIndex = 14;
+            // 
+            // b_CreateGroup
+            // 
+            this.b_CreateGroup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.b_CreateGroup.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.b_CreateGroup.Location = new System.Drawing.Point(119, 3);
+            this.b_CreateGroup.Name = "b_CreateGroup";
+            this.b_CreateGroup.Size = new System.Drawing.Size(110, 23);
+            this.b_CreateGroup.TabIndex = 14;
+            this.b_CreateGroup.Text = "Create new group";
+            this.b_CreateGroup.UseVisualStyleBackColor = false;
+            this.b_CreateGroup.Click += new System.EventHandler(this.b_CreateGroup_Click);
             // 
             // Editor
             // 
@@ -429,5 +443,6 @@
         private System.Windows.Forms.SplitContainer c_buttonsContainer;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Button b_CreateGroup;
     }
 }

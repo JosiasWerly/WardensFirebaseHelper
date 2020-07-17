@@ -24,8 +24,6 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
 
         public Size size; 
         public Point location;
-
-        public IEnumerable<string> availableEnemies;
     }
 
     public class GroupReplicativePanel : Panel {
@@ -88,7 +86,7 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
                     Size = new Size(150, this.Height / 2),
                 };
 
-                foreach (var enemy in config.availableEnemies)
+                foreach (var enemy in WardensEnviroment.AvailableEnemies)
                     spawnCombobox.Items.Add(enemy);
 
                 this.Controls.Add(spawnCombobox);
@@ -209,13 +207,11 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
     public class GroupPage : System.Windows.Forms.TabPage {
         public const int UNIT_CARD_SIZE = 40;
         public Group Group { get; private set; }
-        public IEnumerable<string> AvailableEnemies { get; set; }
 
-        public GroupPage(string name,  Group group, IEnumerable<string> availableEnemies) {
+        public GroupPage(string name,  Group group) {
             Group = group;
             this.BackColor = Color.White;
             this.Text = this.Name = name;
-            this.AvailableEnemies = availableEnemies;
 
             Reload();
         }
@@ -233,8 +229,6 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
 
                     size = new Size(750, UNIT_CARD_SIZE),
                     location = new Point(0, (enemyIndex + 1) * UNIT_CARD_SIZE),
-
-                    availableEnemies = AvailableEnemies,
                 });
                 this.Controls.Add(enemyPanel);
             }
@@ -246,12 +240,16 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
             from page in groupControl.TabPages.Cast<GroupPage>()
             select page;
 
+        public Wave Wave { get; private set; }
         public int Index { get; private set; }
+
         public int CurrentGroupIndex => groupControl.SelectedIndex;
         public GroupPage CurrentGroup => (GroupPage)groupControl.TabPages[CurrentGroupIndex];
+
         TabControl groupControl;
 
-        public WavePage(int index, Size size, IEnumerable<Group> groupCollection, IEnumerable<string> availableEnemies) {
+        public WavePage(int index, Size size, Wave wave) {
+            Wave = wave;
             Index = index;
 
             this.Name = $"wavePage{Index}";
@@ -267,8 +265,14 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
             };
             this.Controls.Add(groupControl);
 
-            foreach (var group in groupCollection) {
-                GroupPage groupPage = new GroupPage($"Group {groupControl.TabPages.Count}", group, availableEnemies);
+            Reload();
+        }
+
+        public void Reload() {
+            groupControl.Controls.Clear();
+
+            foreach (var group in Wave.groups) {
+                GroupPage groupPage = new GroupPage($"Group {groupControl.TabPages.Count}", group);
                 groupControl.TabPages.Add(groupPage);
             }
         }

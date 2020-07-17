@@ -32,12 +32,20 @@ namespace WardensFirebaseHelper.Structures.Levels {
         public List<Group> groups { get; set; }
         public int time_limit { get; set; }
         public string wave_name { get; set; }
+
+        public Wave() {
+            groups = new List<Group>();
+        }
     }
 
     public class Group {
         public List<EnemySpawn> enemy_spawn { get; set; }
         public string spawn_location { get; set; }
         public int spawn_time { get; set; }
+
+        public Group() {
+            enemy_spawn = new List<EnemySpawn>();
+        }
     }
 
     public class EnemySpawn {

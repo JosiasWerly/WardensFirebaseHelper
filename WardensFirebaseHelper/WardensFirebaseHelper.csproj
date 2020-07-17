@@ -62,6 +62,7 @@
     <Compile Include="Files\FormHelpers\GroupPage.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Files\Utils\WardensEnviroment.cs" />
     <Compile Include="Files\WardenStructures\Enemies.cs" />
     <Compile Include="Files\WardenStructures\Levels.cs" />
     <Compile Include="Files\Worker.cs" />

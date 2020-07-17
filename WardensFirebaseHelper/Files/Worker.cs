@@ -129,6 +129,9 @@ namespace WardensFirebaseHelper.Files {
         public Group GetGroup(string levelName, int challengeIndex, int waveIndex, int groupIndex) {
             return Levels[levelName].challenges[challengeIndex].waves[waveIndex].groups[groupIndex];
         }
+        public Wave GetWave(string levelName, int challengeIndex, int waveIndex) {
+            return Levels[levelName].challenges[challengeIndex].waves[waveIndex];
+        }
 
         public void ApplyLevelChanges() => database[LEVELS_KEY] = JToken.FromObject(Levels);
         public void ApplyEnemyChanges() => database[ENEMIES_KEY] = JToken.FromObject(Enemies);

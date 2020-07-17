@@ -36,11 +36,13 @@ namespace WardensFirebaseHelper.Forms {
         public GroupPage CurrentGroupPage => (waveTabs.TabPages[CurrentWaveIndex] as WavePage).CurrentGroup;
         public int CurrentGroupIndex => (waveTabs.TabPages[CurrentWaveIndex] as WavePage).CurrentGroupIndex;
 
+        public WavePage CurrentWavePage => (WavePage)waveTabs.TabPages[CurrentWaveIndex];
+
         public int CurrentWaveIndex => waveTabs.SelectedIndex;
         public string CurrentLevelName => mapComboBox.Text;
 
-        public bool IsSelectedChallengeValid => challengesComboBox.SelectedItem != null;
-        public bool IsSelectedMapValid => mapComboBox.SelectedItem != null;
+        public bool SelectedChallengeIsValid => challengesComboBox.SelectedItem != null;
+        public bool SelectedMapIsValid => mapComboBox.SelectedItem != null;
 
 
         List<TabControl> groupTabList = new List<TabControl>();
@@ -64,6 +66,8 @@ namespace WardensFirebaseHelper.Forms {
 
             foreach (var mapName in dbWorker.GetLevelNames())
                 mapComboBox.Items.Add(mapName);
+
+            WardensEnviroment.AvailableEnemies = dbWorker.GetEnemyNames();
         }
 
         private void mapComboBox_SelectedIndexChanged(object sender, EventArgs e) {
@@ -85,7 +89,7 @@ namespace WardensFirebaseHelper.Forms {
                 
                 int waveCount = dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge);
                 for (int waveIndex = 0; waveIndex < waveCount; waveIndex++) {
-                    WavePage wavePage = new WavePage(waveIndex, new Size(TABS_WIDTH, TABS_HEIGHT), dbWorker.GetGroups(CurrentLevelName, CurrentChallenge, waveIndex), dbWorker.GetEnemyNames());
+                    WavePage wavePage = new WavePage(waveIndex, new Size(TABS_WIDTH, TABS_HEIGHT), dbWorker.GetWave(CurrentLevelName, CurrentChallenge, waveIndex));
                     waveTabs.TabPages.Add(wavePage);
                 }
             }
@@ -116,11 +120,23 @@ namespace WardensFirebaseHelper.Forms {
         }
 
         private void b_CreateEnemy_Click(object sender, EventArgs e) {
-            if(IsSelectedMapValid && IsSelectedChallengeValid) {
+            if(SelectedMapIsValid && SelectedChallengeIsValid) {
                 EnemySpawn enemySpawn = new EnemySpawn();
 
                 CurrentGroupPage.Group.enemy_spawn.Add(enemySpawn);
                 CurrentGroupPage.Reload();
+            }
+        }
+
+        private void b_CreateGroup_Click(object sender, EventArgs e) {
+            if(SelectedMapIsValid && SelectedChallengeIsValid) {
+
+                Task.Run(() => {
+                    var dialogBox = MessageBox.Show("Wait while the page is reloading...", "Warning", MessageBoxButtons.OK);
+                });
+
+                CurrentWavePage.Wave.groups.Add(new Group());
+                CurrentWavePage.Reload();
             }
         }
     }
