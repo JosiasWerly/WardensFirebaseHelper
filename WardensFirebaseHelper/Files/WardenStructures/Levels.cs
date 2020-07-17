@@ -8,8 +8,6 @@ using System.Runtime.Remoting.Messaging;
 using System.Collections;
 
 namespace WardensFirebaseHelper.Structures.Levels {
-
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse); 
     public class Root {
         public Levels Levels { get; set; }
     }
@@ -57,7 +55,6 @@ namespace WardensFirebaseHelper.Structures.Levels {
         public string DisplayName { get; set; }
         public string LargeDescription { get; set; }
         public string ShortDescription { get; set; }
-
     }
 
 

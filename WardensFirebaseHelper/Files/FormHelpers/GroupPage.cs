@@ -7,6 +7,7 @@ using System;
 
 using WardensFirebaseHelper.Structures.Levels;
 using System.Security.RightsManagement;
+using WardensFirebaseHelper.Forms;
 
 
 /*
@@ -237,16 +238,22 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
 
     public class WavePage : TabPage {
         public IEnumerable<GroupPage> GroupPages =>
-            from page in groupControl.TabPages.Cast<GroupPage>()
+            from page in GroupControl.TabPages.Cast<GroupPage>()
             select page;
 
         public Wave Wave { get; private set; }
         public int Index { get; private set; }
 
-        public int CurrentGroupIndex => groupControl.SelectedIndex;
-        public GroupPage CurrentGroup => (GroupPage)groupControl.TabPages[CurrentGroupIndex];
+        public int CurrentGroupIndex => GroupControl.SelectedIndex;
+        public GroupPage CurrentGroup {
+            get {
+                return CurrentGroupIndex >= 0 && CurrentGroupIndex < GroupControl.TabPages.Count ?
+                    (GroupPage)GroupControl.TabPages[CurrentGroupIndex] :
+                    null;
+            }
+        }
 
-        TabControl groupControl;
+        public TabControl GroupControl { get; private set; }
 
         public WavePage(int index, Size size, Wave wave) {
             Wave = wave;
@@ -259,22 +266,34 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
             this.AutoScroll = true;
             this.Size = Size;
 
-            groupControl = new TabControl() {
+            WaveInfoPanel waveInfoPanel = new WaveInfoPanel(wave) {
                 Location = new Point(0, 0),
-                Size = size
             };
-            this.Controls.Add(groupControl);
+            this.Controls.Add(waveInfoPanel);
+
+            GroupControl = new TabControl() {
+                Location = new Point(0, waveInfoPanel.Height),
+                Size = new Size(size.Width, size.Height - waveInfoPanel.Height)
+            };
+            this.Controls.Add(GroupControl);
+            GroupControl.Selected += OnGroupTabSelected;
 
             Reload();
         }
 
         public void Reload() {
-            groupControl.Controls.Clear();
+            GroupControl.Controls.Clear();
 
             foreach (var group in Wave.groups) {
-                GroupPage groupPage = new GroupPage($"Group {groupControl.TabPages.Count}", group);
-                groupControl.TabPages.Add(groupPage);
+                GroupPage groupPage = new GroupPage($"Group {GroupControl.TabPages.Count}", group);
+                GroupControl.TabPages.Add(groupPage);
             }
+        }
+
+        void OnGroupTabSelected(object sender, TabControlEventArgs e) {
+
+            this.AutoScroll = true;
+            this.VerticalScroll.Value = 0;
         }
     }
 }

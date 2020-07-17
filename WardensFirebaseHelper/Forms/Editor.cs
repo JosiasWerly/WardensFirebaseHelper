@@ -13,18 +13,11 @@ using System;
 
 using WardensFirebaseHelper.Files;
 using WardensFirebaseHelper.Files.FormHelpers;
-using System.Text.RegularExpressions;
+
 using WardensFirebaseHelper.Structures.Levels;
 using Group = WardensFirebaseHelper.Structures.Levels.Group;
 
 namespace WardensFirebaseHelper.Forms {
-    public struct UnitPanelStructures {
-        public ComboBox cb_enemyClass;
-        public TextBox tb_spawnPoint;
-        public TextBox tb_spawnTime;
-        public TextBox tb_quantity;
-    }
-
     public partial class Editor : Form {
         public const int UNIT_CARD_SIZE = 40;
         public const int TABS_WIDTH = 750;
@@ -62,41 +55,10 @@ namespace WardensFirebaseHelper.Forms {
             InitializeComponent();
             SetVisibilityForHideableContent(false);
 
-            waveTabs.Selected += HandleWaveSelection;
-
             foreach (var mapName in dbWorker.GetLevelNames())
                 mapComboBox.Items.Add(mapName);
 
             WardensEnviroment.AvailableEnemies = dbWorker.GetEnemyNames();
-        }
-
-        private void mapComboBox_SelectedIndexChanged(object sender, EventArgs e) {
-            if(mapComboBox.SelectedItem != null) {
-                challengesComboBox.Text = string.Empty;
-                challengesComboBox.Items.Clear();
-
-                for (int i = 0; i < dbWorker.GetChallengeCountOf(CurrentLevelName); i++) {
-                    challengesComboBox.Items.Add(i);
-                }
-            }
-        }
-
-        private void challengesComboBox_SelectedIndexChanged(object sender, EventArgs e) {
-            if(challengesComboBox.SelectedItem != null && mapComboBox.SelectedItem != null) {
-                waveTabs.TabPages.Clear();
-
-                SetVisibilityForHideableContent(true);
-                
-                int waveCount = dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge);
-                for (int waveIndex = 0; waveIndex < waveCount; waveIndex++) {
-                    WavePage wavePage = new WavePage(waveIndex, new Size(TABS_WIDTH, TABS_HEIGHT), dbWorker.GetWave(CurrentLevelName, CurrentChallenge, waveIndex));
-                    waveTabs.TabPages.Add(wavePage);
-                }
-            }
-        }
-
-        private void HandleWaveSelection(object sender, EventArgs e) {
-            Console.WriteLine("Aaaua");
         }
 
         private void SetVisibilityForHideableContent(bool visible) {
@@ -104,27 +66,103 @@ namespace WardensFirebaseHelper.Forms {
             c_buttonsContainer.Visible = visible;
         }
 
+        private void ReloadWavesTab() {
+            waveTabs.TabPages.Clear();
+
+            int waveCount = dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge);
+            for (int waveIndex = 0; waveIndex < waveCount; waveIndex++) {
+                WavePage wavePage = new WavePage(waveIndex, new Size(TABS_WIDTH, TABS_HEIGHT), dbWorker.GetWave(CurrentLevelName, CurrentChallenge, waveIndex));
+                waveTabs.TabPages.Add(wavePage);
+            }
+        }
+
+        private bool SaveData() {
+            try {
+                dbWorker.ApplyLevelChanges();
+                dataBaseInterface.saveToLocal();
+                return true;
+            }
+            catch(Exception e) {
+                return false;
+            }
+        }
+        private bool UploadData() {
+            try {
+                dbWorker.ApplyLevelChanges();
+                dataBaseInterface.uploadDB();
+                return true;
+            }
+            catch (Exception e) {
+                return false;
+            }
+        }
+
+
+        private void Editor_FormClosing(object sender, FormClosingEventArgs e) {
+            // Display a MsgBox asking the user to save changes or abort.
+            var option = MessageBox.Show("Do you want to save changes your changes?", "Wave editor", MessageBoxButtons.YesNoCancel);
+
+            if      (option == DialogResult.Yes)    b_Save_Click(null, null);
+            else if (option == DialogResult.Cancel) e.Cancel = true;
+        }
+
+        private void mapComboBox_SelectedIndexChanged(object sender, EventArgs e) {
+            if(mapComboBox.SelectedItem != null) {
+                challengesComboBox.Items.Clear();
+
+                for (int i = 0; i < dbWorker.GetChallengeCountOf(CurrentLevelName); i++) {
+                    challengesComboBox.Items.Add(i);
+                }
+
+                challengesComboBox.Text = string.Empty;
+                challengesComboBox.SelectedItem = null;
+                SetVisibilityForHideableContent(false);
+            }
+        }
+
+        private void challengesComboBox_SelectedIndexChanged(object sender, EventArgs e) {
+            if(challengesComboBox.SelectedItem != null && mapComboBox.SelectedItem != null) {
+                ReloadWavesTab();
+
+                SetVisibilityForHideableContent(true);
+            }
+        }
+
+
         private void b_Save_Click(object sender, EventArgs e) {
-            dbWorker.ApplyLevelChanges();
-            dataBaseInterface.saveToLocal();
+            if (SaveData()) {
+                MessageBox.Show("Save successful!", "Save", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else {
+                MessageBox.Show("Save failed!", "Save", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void b_Reload_Click(object sender, EventArgs e) {
             dataBaseInterface.loadFromLocal();
             dbWorker = new Worker(dataBaseInterface.dbData);
 
-            challengesComboBox.SelectedItem = null;
-            mapComboBox.SelectedItem = null;
+            mapComboBox.SelectedIndex = 0;
+            challengesComboBox.SelectedIndex = 0;
+            waveTabs.SelectedIndex = 0;
+            CurrentWavePage.GroupControl.SelectedIndex = 0;
 
-            SetVisibilityForHideableContent(false);
+            //SetVisibilityForHideableContent(false);
         }
 
         private void b_CreateEnemy_Click(object sender, EventArgs e) {
             if(SelectedMapIsValid && SelectedChallengeIsValid) {
                 EnemySpawn enemySpawn = new EnemySpawn();
 
-                CurrentGroupPage.Group.enemy_spawn.Add(enemySpawn);
-                CurrentGroupPage.Reload();
+                if(CurrentGroupPage != null && CurrentGroupPage.Group != null) {
+                    CurrentGroupPage.Group.enemy_spawn.Add(enemySpawn);
+                    CurrentGroupPage.Reload();
+                }
+                else {
+                    Task.Run(() => {
+                        MessageBox.Show("Please. You must create a group firts.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    });
+                }
             }
         }
 
@@ -137,6 +175,25 @@ namespace WardensFirebaseHelper.Forms {
 
                 CurrentWavePage.Wave.groups.Add(new Group());
                 CurrentWavePage.Reload();
+            }
+        }
+
+        private void b_CreateWave_Click(object sender, EventArgs e) {
+            if (SelectedMapIsValid && SelectedChallengeIsValid) {
+                Challenge currentChallenge = dbWorker.GetChallenge(CurrentLevelName, CurrentChallenge);
+                currentChallenge.waves.Add(new Wave());
+
+                ReloadWavesTab();
+                waveTabs.SelectedIndex = waveTabs.TabCount - 1;
+            }
+        }
+
+        private void b_Upload_Click(object sender, EventArgs e) {
+            if (UploadData()) {
+                MessageBox.Show("Upload successful!", "Upload", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else {
+                MessageBox.Show("Upload failed!", "Upload", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

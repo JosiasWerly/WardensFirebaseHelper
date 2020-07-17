@@ -51,9 +51,10 @@
             this.b_Upload = new System.Windows.Forms.Button();
             this.b_CreateEnemy = new System.Windows.Forms.Button();
             this.c_buttonsContainer = new System.Windows.Forms.SplitContainer();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
             this.b_CreateGroup = new System.Windows.Forms.Button();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.b_CreateWave = new System.Windows.Forms.Button();
             this.waveTabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabControl1.SuspendLayout();
@@ -65,8 +66,8 @@
             this.c_buttonsContainer.Panel1.SuspendLayout();
             this.c_buttonsContainer.Panel2.SuspendLayout();
             this.c_buttonsContainer.SuspendLayout();
-            this.flowLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel2.SuspendLayout();
+            this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // waveTabs
@@ -317,6 +318,7 @@
             this.b_Upload.TabIndex = 13;
             this.b_Upload.Text = "Upload";
             this.b_Upload.UseVisualStyleBackColor = false;
+            this.b_Upload.Click += new System.EventHandler(this.b_Upload_Click);
             // 
             // b_CreateEnemy
             // 
@@ -347,22 +349,11 @@
             this.c_buttonsContainer.SplitterDistance = 687;
             this.c_buttonsContainer.TabIndex = 13;
             // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.Controls.Add(this.b_Upload);
-            this.flowLayoutPanel1.Controls.Add(this.b_Save);
-            this.flowLayoutPanel1.Controls.Add(this.b_Reload);
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(303, 43);
-            this.flowLayoutPanel1.TabIndex = 14;
-            // 
             // flowLayoutPanel2
             // 
             this.flowLayoutPanel2.Controls.Add(this.b_CreateEnemy);
             this.flowLayoutPanel2.Controls.Add(this.b_CreateGroup);
+            this.flowLayoutPanel2.Controls.Add(this.b_CreateWave);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(688, 43);
@@ -380,6 +371,30 @@
             this.b_CreateGroup.UseVisualStyleBackColor = false;
             this.b_CreateGroup.Click += new System.EventHandler(this.b_CreateGroup_Click);
             // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.Controls.Add(this.b_Upload);
+            this.flowLayoutPanel1.Controls.Add(this.b_Save);
+            this.flowLayoutPanel1.Controls.Add(this.b_Reload);
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(303, 43);
+            this.flowLayoutPanel1.TabIndex = 14;
+            // 
+            // b_CreateWave
+            // 
+            this.b_CreateWave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.b_CreateWave.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.b_CreateWave.Location = new System.Drawing.Point(235, 3);
+            this.b_CreateWave.Name = "b_CreateWave";
+            this.b_CreateWave.Size = new System.Drawing.Size(110, 23);
+            this.b_CreateWave.TabIndex = 15;
+            this.b_CreateWave.Text = "Create new wave";
+            this.b_CreateWave.UseVisualStyleBackColor = false;
+            this.b_CreateWave.Click += new System.EventHandler(this.b_CreateWave_Click);
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -395,6 +410,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Editor";
             this.Text = "Wardens Wave Editor";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Editor_FormClosing);
             this.waveTabs.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
@@ -406,8 +422,8 @@
             this.c_buttonsContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.c_buttonsContainer)).EndInit();
             this.c_buttonsContainer.ResumeLayout(false);
-            this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel2.ResumeLayout(false);
+            this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -444,5 +460,6 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel2;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button b_CreateGroup;
+        private System.Windows.Forms.Button b_CreateWave;
     }
 }
