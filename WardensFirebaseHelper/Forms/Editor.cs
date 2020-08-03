@@ -48,22 +48,38 @@ namespace WardensFirebaseHelper.Forms {
         Worker dbWorker;
 
         public Editor() {
+
+
             dataBaseInterface = new FirebaseInterface(Application.StartupPath + "\\dbLocal.json");
 
-            // Some cached keys can be invalid and require the db to be download again
-            try { dbWorker = new Worker(dataBaseInterface.dbData); }
-            catch (SystemException) {
+            var option = MessageBox.Show("Would you like to use the latest version of the databse?", "Startup", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (option.Equals(DialogResult.Yes)) {
                 dataBaseInterface.downloadDB();
-                dbWorker = new Worker(dataBaseInterface.dbData);
             }
-            
-            InitializeComponent();
-            SetVisibilityForHideableContent(false);
+            else {
+                MessageBox.Show("You're currently using the local copy of the databse, this may not contain the latest changes. Beware when uploading!", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                dataBaseInterface.loadFromLocal();
+            }
 
-            WardensEnviroment.AvailableEnemies = dbWorker.GetEnemyNames();
+            //onException?.Invoke(e);
+            try {
+                dbWorker = new Worker(dataBaseInterface.dbData);
 
-            ResetOwnedMaps();
+                InitializeComponent();
+                SetVisibilityForHideableContent(false);
+
+                WardensEnviroment.AvailableEnemies = dbWorker.GetEnemyNames();
+
+                ResetOwnedMaps();
+            }
+            catch(JsonReaderException e) {
+                MessageBox.Show("Database error!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Application.ExitThread();
+                this.Close();
+            }
         }
+
 
         private void SetVisibilityForHideableContent(bool visible) {
             splitContainer.Visible = visible;
@@ -77,7 +93,7 @@ namespace WardensFirebaseHelper.Forms {
                 dataBaseInterface.saveToLocal();
                 return true;
             }
-            catch(Exception e) {
+            catch(Exception) {
                 return false;
             }
         }
@@ -88,7 +104,7 @@ namespace WardensFirebaseHelper.Forms {
                 dataBaseInterface.uploadDB();
                 return true;
             }
-            catch (Exception e) {
+            catch (Exception) {
                 return false;
             }
         }
@@ -98,12 +114,12 @@ namespace WardensFirebaseHelper.Forms {
 
             int waveCount = dbWorker.GetWaveCountOf(CurrentLevelName, CurrentChallenge);
             for (int waveIndex = 0; waveIndex < waveCount; waveIndex++) {
-                WavePage wavePage = new WavePage(waveIndex, new Size(TABS_WIDTH, TABS_HEIGHT), dbWorker.GetWave(CurrentLevelName, CurrentChallenge, waveIndex));
+                WavePage wavePage = new WavePage(waveIndex, new Size(TABS_WIDTH, TABS_HEIGHT), dbWorker.GetWave(CurrentLevelName, CurrentChallenge, waveIndex), HandleDeleteWaveButtonClicked);
                 waveTabs.TabPages.Add(wavePage);
             }
         }
 
-        private void SimpleReloadAction() {
+        private void SoftReload() {
             if (CurrentWavePage != null) {
                 CurrentWavePage.GroupControl.SelectedIndex = 0;
                 waveTabs.SelectedIndex = 0;
@@ -169,12 +185,31 @@ namespace WardensFirebaseHelper.Forms {
             }
         }
 
-        private void b_Reload_Click(object sender, EventArgs e) {
+        private void b_ReloadLocal_Click(object sender, EventArgs e) {
             dataBaseInterface.loadFromLocal();
             dbWorker = new Worker(dataBaseInterface.dbData);
 
-            SimpleReloadAction();
+            SoftReload();
         }
+
+        private void b_ReloadOnline_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                dataBaseInterface.downloadDB();
+                dbWorker = new Worker(dataBaseInterface.dbData);
+
+                SoftReload();
+
+                MessageBox.Show("Database successfully downloaded!", "Database download", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Database download failed!", "Database download", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }   
+        }
+
+
 
         private void b_CreateEnemy_Click(object sender, EventArgs e) {
             if(SelectedMapIsValid && SelectedChallengeIsValid) {
@@ -255,7 +290,7 @@ namespace WardensFirebaseHelper.Forms {
                 MessageBox.Show("Database file imported successfully!", "Import operation", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 if (!HardReload()) {
-                    SimpleReloadAction();
+                    SoftReload();
                 }
             }
         }
@@ -286,6 +321,15 @@ namespace WardensFirebaseHelper.Forms {
             if (e.KeyData == Keys.Enter) {
                 dbWorker.ReplaceLevel(CurrentLevelName, (sender as TextBox).Text);
                 mapComboBox.Text = (sender as TextBox).Text;
+            }
+        }
+
+        private void HandleDeleteWaveButtonClicked(object sender, EventArgs e)
+        {
+            dbWorker.Delete(CurrentLevelName, CurrentChallenge, ((sender as Control).Parent as WaveInfoPanel).Wave);
+            if (!HardReload())
+            {
+                SoftReload();
             }
         }
     }

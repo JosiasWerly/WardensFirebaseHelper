@@ -26,14 +26,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor));
             this.waveTabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.mapComboBox = new System.Windows.Forms.ComboBox();
             this.panel3 = new System.Windows.Forms.Panel();
             this.tb_mapName = new System.Windows.Forms.TextBox();
             this.l_mapName = new System.Windows.Forms.Label();
-            this.b_Reload = new System.Windows.Forms.Button();
+            this.b_ReloadLocal = new System.Windows.Forms.Button();
             this.b_Save = new System.Windows.Forms.Button();
             this.challengesComboBox = new System.Windows.Forms.ComboBox();
             this.mapLabel = new System.Windows.Forms.Label();
@@ -58,13 +55,12 @@
             this.b_CreateWave = new System.Windows.Forms.Button();
             this.b_CreateMap = new System.Windows.Forms.Button();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.b_ReloadOnline = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.b_Import = new System.Windows.Forms.Button();
             this.b_Export = new System.Windows.Forms.Button();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.waveTabs.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
             this.panel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -87,48 +83,17 @@
             this.waveTabs.Location = new System.Drawing.Point(3, 3);
             this.waveTabs.Name = "waveTabs";
             this.waveTabs.SelectedIndex = 0;
-            this.waveTabs.Size = new System.Drawing.Size(681, 432);
+            this.waveTabs.Size = new System.Drawing.Size(702, 432);
             this.waveTabs.TabIndex = 0;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.tabControl1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Size = new System.Drawing.Size(673, 406);
+            this.tabPage1.Size = new System.Drawing.Size(694, 406);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage3);
-            this.tabControl1.Location = new System.Drawing.Point(3, 3);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(628, 365);
-            this.tabControl1.TabIndex = 0;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(620, 339);
-            this.tabPage2.TabIndex = 0;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(620, 339);
-            this.tabPage3.TabIndex = 1;
-            this.tabPage3.Text = "tabPage3";
-            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // mapComboBox
             // 
@@ -151,7 +116,7 @@
             this.panel3.Controls.Add(this.l_mapName);
             this.panel3.Location = new System.Drawing.Point(3, 25);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(300, 406);
+            this.panel3.Size = new System.Drawing.Size(404, 406);
             this.panel3.TabIndex = 4;
             // 
             // tb_mapName
@@ -171,22 +136,22 @@
             this.l_mapName.TabIndex = 0;
             this.l_mapName.Text = "Map name:";
             // 
-            // b_Reload
+            // b_ReloadLocal
             // 
-            this.b_Reload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_Reload.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.b_Reload.Location = new System.Drawing.Point(123, 3);
-            this.b_Reload.Name = "b_Reload";
-            this.b_Reload.Size = new System.Drawing.Size(84, 23);
-            this.b_Reload.TabIndex = 4;
-            this.b_Reload.Text = "Reload";
-            this.b_Reload.UseVisualStyleBackColor = false;
-            this.b_Reload.Click += new System.EventHandler(this.b_Reload_Click);
+            this.b_ReloadLocal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.b_ReloadLocal.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.b_ReloadLocal.Location = new System.Drawing.Point(144, 3);
+            this.b_ReloadLocal.Name = "b_ReloadLocal";
+            this.b_ReloadLocal.Size = new System.Drawing.Size(80, 23);
+            this.b_ReloadLocal.TabIndex = 4;
+            this.b_ReloadLocal.Text = "Reload local";
+            this.b_ReloadLocal.UseVisualStyleBackColor = false;
+            this.b_ReloadLocal.Click += new System.EventHandler(this.b_ReloadLocal_Click);
             // 
             // b_Save
             // 
             this.b_Save.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_Save.Location = new System.Drawing.Point(213, 3);
+            this.b_Save.Location = new System.Drawing.Point(230, 3);
             this.b_Save.Name = "b_Save";
             this.b_Save.Size = new System.Drawing.Size(84, 23);
             this.b_Save.TabIndex = 5;
@@ -331,15 +296,15 @@
             // 
             this.splitContainer.Panel2.Controls.Add(this.panel3);
             this.splitContainer.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.splitContainer.Size = new System.Drawing.Size(997, 438);
-            this.splitContainer.SplitterDistance = 687;
+            this.splitContainer.Size = new System.Drawing.Size(1122, 438);
+            this.splitContainer.SplitterDistance = 708;
             this.splitContainer.TabIndex = 11;
             // 
             // b_Upload
             // 
             this.b_Upload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.b_Upload.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.b_Upload.Location = new System.Drawing.Point(303, 3);
+            this.b_Upload.Location = new System.Drawing.Point(320, 3);
             this.b_Upload.Name = "b_Upload";
             this.b_Upload.Size = new System.Drawing.Size(84, 23);
             this.b_Upload.TabIndex = 13;
@@ -361,7 +326,8 @@
             // 
             // c_buttonsContainer
             // 
-            this.c_buttonsContainer.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.c_buttonsContainer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.c_buttonsContainer.Location = new System.Drawing.Point(12, 522);
             this.c_buttonsContainer.Name = "c_buttonsContainer";
             // 
@@ -372,19 +338,22 @@
             // c_buttonsContainer.Panel2
             // 
             this.c_buttonsContainer.Panel2.Controls.Add(this.flowLayoutPanel1);
-            this.c_buttonsContainer.Size = new System.Drawing.Size(997, 29);
-            this.c_buttonsContainer.SplitterDistance = 600;
+            this.c_buttonsContainer.Size = new System.Drawing.Size(1122, 29);
+            this.c_buttonsContainer.SplitterDistance = 708;
             this.c_buttonsContainer.TabIndex = 13;
             // 
             // flowLayoutPanel2
             // 
+            this.flowLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel2.Controls.Add(this.b_CreateEnemy);
             this.flowLayoutPanel2.Controls.Add(this.b_CreateGroup);
             this.flowLayoutPanel2.Controls.Add(this.b_CreateWave);
             this.flowLayoutPanel2.Controls.Add(this.b_CreateMap);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(688, 43);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(709, 29);
             this.flowLayoutPanel2.TabIndex = 14;
             // 
             // b_CreateGroup
@@ -423,15 +392,29 @@
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.flowLayoutPanel1.Controls.Add(this.b_Upload);
             this.flowLayoutPanel1.Controls.Add(this.b_Save);
-            this.flowLayoutPanel1.Controls.Add(this.b_Reload);
+            this.flowLayoutPanel1.Controls.Add(this.b_ReloadLocal);
+            this.flowLayoutPanel1.Controls.Add(this.b_ReloadOnline);
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(390, 31);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(407, 31);
             this.flowLayoutPanel1.TabIndex = 14;
+            // 
+            // b_ReloadOnline
+            // 
+            this.b_ReloadOnline.Location = new System.Drawing.Point(53, 3);
+            this.b_ReloadOnline.Name = "b_ReloadOnline";
+            this.b_ReloadOnline.Size = new System.Drawing.Size(85, 23);
+            this.b_ReloadOnline.TabIndex = 14;
+            this.b_ReloadOnline.Text = "Reload online";
+            this.b_ReloadOnline.UseVisualStyleBackColor = true;
+            this.b_ReloadOnline.Click += new System.EventHandler(this.b_ReloadOnline_Click);
             // 
             // openFileDialog1
             // 
@@ -440,7 +423,7 @@
             // b_Import
             // 
             this.b_Import.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_Import.Location = new System.Drawing.Point(922, 10);
+            this.b_Import.Location = new System.Drawing.Point(1047, 10);
             this.b_Import.Name = "b_Import";
             this.b_Import.Size = new System.Drawing.Size(75, 23);
             this.b_Import.TabIndex = 14;
@@ -451,7 +434,7 @@
             // b_Export
             // 
             this.b_Export.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.b_Export.Location = new System.Drawing.Point(922, 39);
+            this.b_Export.Location = new System.Drawing.Point(1047, 39);
             this.b_Export.Name = "b_Export";
             this.b_Export.Size = new System.Drawing.Size(75, 23);
             this.b_Export.TabIndex = 15;
@@ -472,7 +455,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1021, 565);
+            this.ClientSize = new System.Drawing.Size(1146, 565);
             this.Controls.Add(this.b_Export);
             this.Controls.Add(this.b_Import);
             this.Controls.Add(this.c_buttonsContainer);
@@ -487,8 +470,6 @@
             this.Text = "Wardens Wave Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Editor_FormClosing);
             this.waveTabs.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabControl1.ResumeLayout(false);
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.splitContainer.Panel1.ResumeLayout(false);
@@ -510,7 +491,7 @@
         private System.Windows.Forms.TabControl waveTabs;
         private System.Windows.Forms.ComboBox mapComboBox;
         private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Button b_Reload;
+        private System.Windows.Forms.Button b_ReloadLocal;
         private System.Windows.Forms.Button b_Save;
         private System.Windows.Forms.ComboBox challengesComboBox;
         private System.Windows.Forms.Label mapLabel;
@@ -528,9 +509,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Button b_Upload;
         private System.Windows.Forms.Button b_CreateEnemy;
         private System.Windows.Forms.SplitContainer c_buttonsContainer;
@@ -545,5 +523,6 @@
         private System.Windows.Forms.Button b_CreateMap;
         private System.Windows.Forms.Label l_mapName;
         private System.Windows.Forms.TextBox tb_mapName;
+        private System.Windows.Forms.Button b_ReloadOnline;
     }
 }

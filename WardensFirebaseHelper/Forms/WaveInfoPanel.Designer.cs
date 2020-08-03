@@ -27,6 +27,7 @@
             this.timeLimit = new System.Windows.Forms.Label();
             this.nameTextBox = new System.Windows.Forms.TextBox();
             this.waveName = new System.Windows.Forms.Label();
+            this.b_DeleteButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // timeLimitTextBox
@@ -65,11 +66,21 @@
             this.waveName.TabIndex = 4;
             this.waveName.Text = "Wave name";
             // 
+            // b_DeleteButton
+            // 
+            this.b_DeleteButton.Location = new System.Drawing.Point(575, 9);
+            this.b_DeleteButton.Name = "b_DeleteButton";
+            this.b_DeleteButton.Size = new System.Drawing.Size(75, 23);
+            this.b_DeleteButton.TabIndex = 8;
+            this.b_DeleteButton.Text = "Delete wave";
+            this.b_DeleteButton.UseVisualStyleBackColor = true;
+            // 
             // WaveInfoPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Sienna;
+            this.Controls.Add(this.b_DeleteButton);
             this.Controls.Add(this.timeLimitTextBox);
             this.Controls.Add(this.timeLimit);
             this.Controls.Add(this.nameTextBox);
@@ -87,5 +98,6 @@
         private System.Windows.Forms.Label timeLimit;
         private System.Windows.Forms.TextBox nameTextBox;
         private System.Windows.Forms.Label waveName;
+        private System.Windows.Forms.Button b_DeleteButton;
     }
 }

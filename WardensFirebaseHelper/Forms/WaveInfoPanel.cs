@@ -7,12 +7,14 @@ namespace WardensFirebaseHelper.Forms {
     public partial class WaveInfoPanel : UserControl {
         public Wave Wave { get; private set; }
 
-        public WaveInfoPanel(Wave wave) {
+        public WaveInfoPanel(Wave wave, EventHandler onDeleteButtonClicked) {
             Wave = wave;
+
             InitializeComponent();
 
             nameTextBox.Text = Wave.wave_name;
             timeLimitTextBox.Text = Wave.time_limit.ToString();
+            b_DeleteButton.Click += onDeleteButtonClicked;
         }
 
         private void waveNameTextBox_TextChanged(object sender, EventArgs e) {

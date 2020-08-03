@@ -48,8 +48,6 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
         public ComboBox EnemySpawnComboBox { get; private set; }
         public TextBox EnemyAmountTextBox { get; private set; }
 
-        public event Action<int, Group> OnDeleteButtonClicked;
-
         public EnemyPanel(int index, Group group, EnemyPanelConfig config) : base(index, group) {
             // Panel setup
             {
@@ -137,7 +135,9 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
         public TextBox SpawnLocation { get; }
         public TextBox SpawnTime { get; }
 
-        public GroupPanel(Group group, Size size) : base(group) {
+        public Button DeleteButton { get; }
+
+        public GroupPanel(Group group, Size size, EventHandler onButotnClicked) : base(group) {
             // Setup
             {
                 this.Anchor = AnchorStyles.Top | AnchorStyles.Left;
@@ -183,6 +183,17 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
                     Text = Group.spawn_time.ToString(),
                 };
                 this.Controls.Add(SpawnTime);
+
+                DeleteButton = new Button()
+                {
+                    Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                    BackColor = Color.WhiteSmoke,
+                    Location = new Point(550, 5),
+                    Size = new Size(100, 23),
+                    Text = "Delete group",
+                };
+                this.Controls.Add(DeleteButton);
+                DeleteButton.Click += onButotnClicked;
             }
 
             // Method bindings
@@ -208,19 +219,20 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
     public class GroupPage : System.Windows.Forms.TabPage {
         public const int UNIT_CARD_SIZE = 40;
         public Group Group { get; private set; }
+        EventHandler onButotnClicked;
 
-        public GroupPage(string name,  Group group) {
+        public GroupPage(string name,  Group group, EventHandler onButotnClicked) {
             Group = group;
             this.BackColor = Color.White;
             this.Text = this.Name = name;
-
+            this.onButotnClicked = onButotnClicked;
             Reload();
         }
 
         public void Reload() {
             this.Controls.Clear();
 
-            GroupPanel groupPanel = new GroupPanel(Group, new Size(750, UNIT_CARD_SIZE));
+            GroupPanel groupPanel = new GroupPanel(Group, new Size(750, UNIT_CARD_SIZE), onButotnClicked);
             this.Controls.Add(groupPanel);
 
             for (int enemyIndex = 0; enemyIndex < Group.enemy_spawn.Count; enemyIndex++) {
@@ -241,6 +253,7 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
             from page in GroupControl.TabPages.Cast<GroupPage>()
             select page;
 
+        EventHandler OnDeleteButtonClicked { get; }
         public Wave Wave { get; private set; }
         public int Index { get; private set; }
 
@@ -255,9 +268,10 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
 
         public TabControl GroupControl { get; private set; }
 
-        public WavePage(int index, Size size, Wave wave) {
+        public WavePage(int index, Size size, Wave wave, EventHandler onDeleteButtonClicked) {
             Wave = wave;
             Index = index;
+            OnDeleteButtonClicked = onDeleteButtonClicked;
 
             this.Name = $"wavePage{Index}";
             this.Text = $"Wave [{Index}]";
@@ -266,7 +280,7 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
             this.AutoScroll = true;
             this.Size = Size;
 
-            WaveInfoPanel waveInfoPanel = new WaveInfoPanel(wave) {
+            WaveInfoPanel waveInfoPanel = new WaveInfoPanel(wave, OnDeleteButtonClicked) {
                 Location = new Point(0, 0),
             };
             this.Controls.Add(waveInfoPanel);
@@ -285,7 +299,7 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
             GroupControl.Controls.Clear();
 
             foreach (var group in Wave.groups) {
-                GroupPage groupPage = new GroupPage($"Group {GroupControl.TabPages.Count}", group);
+                GroupPage groupPage = new GroupPage($"Group {GroupControl.TabPages.Count}", group, OnDeleteGroupClicked);
                 GroupControl.TabPages.Add(groupPage);
             }
         }
@@ -294,6 +308,12 @@ namespace WardensFirebaseHelper.Files.FormHelpers {
 
             this.AutoScroll = true;
             this.VerticalScroll.Value = 0;
+        }
+
+        void OnDeleteGroupClicked(object sender, EventArgs e)
+        {
+            Wave.groups.Remove(((sender as Control).Parent as GroupPanel).Group);
+            Reload();
         }
     }
 }

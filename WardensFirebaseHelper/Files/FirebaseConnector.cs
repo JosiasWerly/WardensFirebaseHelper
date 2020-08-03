@@ -7,9 +7,6 @@ using System.Net.Http.Headers;
 using System.Text;
 
 namespace WardensFirebaseHelper.Files {
-    public class AAA {
-        public string A { get;  }
-    }
 
     public class FirebaseConnector {
         string dbURL, dbPassword;
@@ -91,12 +88,12 @@ namespace WardensFirebaseHelper.Files {
             if(filePath == "")
                 throw new System.InvalidOperationException("db local instance needs a path");
             dbLocalPath = filePath;            
-            try {
-                loadFromLocal();
-            }
-            catch (Exception) {
-                downloadDB();
-            }
+            //try {
+            //    loadFromLocal();
+            //}
+            //catch (Exception) {
+            //    downloadDB();
+            //}
         }
         public void downloadDB() {
             dbData = fb.downloadJson("");

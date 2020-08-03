@@ -8,7 +8,11 @@ namespace WardensFirebaseHelper {
         static void Main() {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Editor());            
+            Editor e = new Editor();
+
+            if(!e.Disposing && !e.IsDisposed) {
+                Application.Run(e);
+            }
         }
     }
 }

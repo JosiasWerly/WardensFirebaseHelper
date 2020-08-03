@@ -11,6 +11,9 @@ using WardensFirebaseHelper.Structures.Enemies;
 using WardensFirebaseHelper.Structures.Levels;
 
 namespace WardensFirebaseHelper.Files {
+
+    public delegate void JsonExceptionDelegate(JsonReaderException e);
+
     public class Worker {
         const string ENEMIES_KEY = "Enemies";
         const string LEVELS_KEY = "Levels";
@@ -21,11 +24,16 @@ namespace WardensFirebaseHelper.Files {
         Levels Levels { get; set; }
         JObject database;
 
-        public Worker(JObject database) {
-            this.database = database;
-
-            Levels = this.database[LEVELS_KEY].ToObject<Levels>();
-            Enemies = this.database[ENEMIES_KEY].ToObject<Enemies>();
+        public Worker(JObject database, JsonExceptionDelegate onException = null)
+        {
+            try {
+                this.database = database;
+                Levels = this.database[LEVELS_KEY].ToObject<Levels>();
+                Enemies = this.database[ENEMIES_KEY].ToObject<Enemies>();
+            }
+            catch (JsonReaderException e) {
+                throw e;
+            }
         }
 
         public IEnumerable<Group>  GetGroups(string levelName, int challegeIndex, int waveIndex) {
@@ -133,6 +141,7 @@ namespace WardensFirebaseHelper.Files {
         public Wave GetWave(string levelName, int challengeIndex, int waveIndex) {
             return Levels[levelName].challenges[challengeIndex].waves[waveIndex];
         }
+
         public Challenge GetChallenge (string levelName, int challengeIndex) {
             return Levels[levelName].challenges[challengeIndex];
         }
@@ -141,6 +150,20 @@ namespace WardensFirebaseHelper.Files {
         public void ApplyEnemyChanges() => database[ENEMIES_KEY] = JToken.FromObject(Enemies);
 
 
+        public void ReplaceLevel(string name, string newName) {
+            if (!string.IsNullOrEmpty(newName) && newName != name) {
+                if (Levels.ContainsKey(name)) {
+                    Level level = Levels[name];
+                    Levels.Remove(name);
+
+                    Levels.Add(newName, level);
+                }
+            }
+        }
+        public void Delete(string currentLevel, int challengeIndex, Wave wave)
+        {
+            Levels[currentLevel].challenges[challengeIndex].waves.Remove(wave);
+        }
         public Level CreateLevel() {
             string mapName = "new level";
             if (Levels.ContainsKey(mapName)) {
@@ -158,15 +181,5 @@ namespace WardensFirebaseHelper.Files {
             return Levels[mapName];
         }
 
-        public void ReplaceLevel(string name, string newName) {
-            if (!string.IsNullOrEmpty(newName) && newName != name) {
-                if (Levels.ContainsKey(name)) {
-                    Level level = Levels[name];
-                    Levels.Remove(name);
-
-                    Levels.Add(newName, level);
-                }
-            }
-        }
     }
 }
